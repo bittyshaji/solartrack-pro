@@ -3,8 +3,9 @@ import { useAuth } from '../contexts/AuthContext'
 import { supabase } from '../lib/supabase'
 
 export default function ProtectedRoute({ children, requiredRole = null }) {
-  const { user, profile, loading, isAuthenticated, isApproved } = useAuth()
+  const { user, profile, loading, profileLoading, isAuthenticated, isApproved } = useAuth()
 
+  // Wait for session check
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -17,6 +18,18 @@ export default function ProtectedRoute({ children, requiredRole = null }) {
   }
 
   if (!isAuthenticated) return <Navigate to="/login" replace />
+
+  // Wait for profile to load after session is confirmed
+  if (profileLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading profile...</p>
+        </div>
+      </div>
+    )
+  }
 
   // Account rejected
   if (profile?.approval_status === 'rejected') {
