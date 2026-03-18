@@ -57,16 +57,7 @@ export function AuthProvider({ children }) {
       })
       if (signUpError) throw signUpError
 
-      // Insert profile row with pending status
-      if (data?.user) {
-        await supabase.from('user_profiles').insert({
-          id: data.user.id,
-          full_name: metadata.full_name || '',
-          email,
-          role: metadata.role || 'worker',
-          approval_status: 'pending',
-        })
-      }
+      // Profile is auto-created by Supabase trigger (handle_new_user)
       return { data, error: null }
     } catch (err) {
       setError(err.message)

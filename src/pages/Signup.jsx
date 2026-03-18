@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
+// useNavigate kept for potential future use
 import { useAuth } from '../contexts/AuthContext'
 import { Mail, Lock, User, UserCheck } from 'lucide-react'
 import toast from 'react-hot-toast'
@@ -37,9 +38,42 @@ export default function Signup() {
     if (error) {
       toast.error(error)
     } else {
-      toast.success('Signup successful! Check your email to confirm.')
-      navigate('/login')
+      setSubmitted(true)
     }
+  }
+
+  const [submitted, setSubmitted] = useState(false)
+
+  if (submitted) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 to-blue-50 px-4">
+        <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-8 text-center">
+          <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span className="text-3xl">⏳</span>
+          </div>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Registration Submitted!</h2>
+          <p className="text-gray-600 mb-4">
+            Your account request has been sent to the admin for approval.
+          </p>
+          <div className="bg-orange-50 border border-orange-200 rounded-lg p-4 mb-6 text-left">
+            <p className="text-sm text-orange-800">
+              📧 <strong>Email:</strong> {email}<br />
+              🔖 <strong>Role requested:</strong> <span className="capitalize">{role}</span><br />
+              ✅ <strong>Status:</strong> Pending admin approval
+            </p>
+          </div>
+          <p className="text-sm text-gray-500 mb-4">
+            You will be able to log in once an admin approves your account.
+          </p>
+          <Link
+            to="/login"
+            className="inline-block bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 py-2 rounded-lg transition"
+          >
+            Go to Login
+          </Link>
+        </div>
+      </div>
+    )
   }
 
   if (loading) {
