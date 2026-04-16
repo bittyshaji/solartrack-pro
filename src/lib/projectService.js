@@ -4,7 +4,8 @@
  */
 
 import { supabase } from './supabase'
-import { queueStatusUpdate } from './emailService'
+// Status update emails disabled in Phase 2B
+// import { queueStatusUpdate } from './emailService'
 
 /**
  * PROJECT STATUS OPTIONS
@@ -273,11 +274,13 @@ export async function updateProjectState(id, state) {
           })
         }
 
-        if (customerEmails.length > 0) {
-          await queueStatusUpdate(id, customerEmails, `Project status updated to ${state}`)
-        }
+        // Status update emails disabled in Phase 2B
+        // if (customerEmails.length > 0) {
+        //   await queueStatusUpdate(id, customerEmails, `Project status updated to ${state}`)
+        // }
       } catch (emailErr) {
-        console.warn('Failed to queue status update email:', emailErr)
+        // Status update emails disabled - this error is no longer relevant
+        // console.warn('Failed to queue status update email:', emailErr)
       }
     }
 
