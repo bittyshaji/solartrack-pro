@@ -416,20 +416,27 @@ export async function sendEmailViaResend(to, subject, htmlBody, emailType = 'gen
     const messageId = data.id
 
     // Log to database
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    const userId = user?.id || null
+
     const { error: logError } = await supabase
       .from('email_notifications')
       .insert([
         {
-          recipient: to,
+          user_id: userId,
+          project_id: relatedData.projectId || null,
+          recipient_email: to,
           email_type: emailType,
           subject: subject,
+          body: '',
           status: 'sent',
-          message_id: messageId,
           sent_at: new Date().toISOString(),
-          related_project_id: relatedData.projectId || null,
-          related_invoice_id: relatedData.invoiceId || null,
-          related_task_id: relatedData.taskId || null,
-          retry_count: 0
+          retry_count: 0,
+          metadata: {
+            messageId: messageId,
+            invoiceId: relatedData.invoiceId,
+            taskId: relatedData.taskId
+          }
         }
       ])
 
@@ -444,19 +451,26 @@ export async function sendEmailViaResend(to, subject, htmlBody, emailType = 'gen
 
     // Log failure to database
     try {
+      const { data: { user }, error: authError } = await supabase.auth.getUser()
+      const userId = user?.id || null
+
       const { error: logError } = await supabase
         .from('email_notifications')
         .insert([
           {
-            recipient: to,
+            user_id: userId,
+            project_id: relatedData.projectId || null,
+            recipient_email: to,
             email_type: emailType,
             subject: subject,
+            body: '',
             status: 'failed',
-            error_message: error.message,
-            related_project_id: relatedData.projectId || null,
-            related_invoice_id: relatedData.invoiceId || null,
-            related_task_id: relatedData.taskId || null,
-            retry_count: 0
+            retry_count: 0,
+            metadata: {
+              errorMessage: error.message,
+              invoiceId: relatedData.invoiceId,
+              taskId: relatedData.taskId
+            }
           }
         ])
 
@@ -518,20 +532,32 @@ export async function sendEmailWithTemplate(to, templateName, variables = {}) {
  */
 export async function queueEmailNotification(emailNotification) {
   try {
+    // Get current authenticated user
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    if (authError || !user) {
+      throw new Error('User not authenticated')
+    }
+
     const { data, error } = await supabase
       .from('email_notifications')
       .insert([
         {
-          recipient: emailNotification.recipient,
+          user_id: user.id,
+          project_id: emailNotification.projectId || null,
+          recipient_email: emailNotification.recipient,
           email_type: emailNotification.emailType,
           subject: emailNotification.subject,
-          html_body: emailNotification.htmlBody || null,
+          body: emailNotification.htmlBody || '',
+          template_vars: {
+            invoiceId: emailNotification.invoiceId,
+            taskId: emailNotification.taskId
+          },
           status: 'pending',
-          scheduled_at: new Date().toISOString(),
-          related_project_id: emailNotification.projectId || null,
-          related_invoice_id: emailNotification.invoiceId || null,
-          related_task_id: emailNotification.taskId || null,
-          retry_count: 0
+          retry_count: 0,
+          metadata: {
+            relatedInvoiceId: emailNotification.invoiceId,
+            relatedTaskId: emailNotification.taskId
+          }
         }
       ])
       .select()
@@ -758,7 +784,7 @@ export async function getEmailLogs(filters = {}) {
       .select('*')
 
     if (filters.projectId) {
-      query = query.eq('related_project_id', filters.projectId)
+      query = query.eq('project_id', filters.projectId)
     }
 
     if (filters.status) {
@@ -766,7 +792,7 @@ export async function getEmailLogs(filters = {}) {
     }
 
     if (filters.recipient) {
-      query = query.ilike('recipient', `%${filters.recipient}%`)
+      query = query.ilike('recipient_email', `%${filters.recipient}%`)
     }
 
     if (filters.dateRange) {

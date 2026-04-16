@@ -180,13 +180,23 @@ CREATE POLICY "email_notifications_view_policy" ON public.email_notifications
         )
     );
 
--- RLS Policy: Only service role can insert (for background jobs)
+-- RLS Policy: Authenticated users can insert notifications for their projects
 CREATE POLICY "email_notifications_insert_policy" ON public.email_notifications
-    FOR INSERT WITH CHECK (auth.role() = 'service_role');
+    FOR INSERT WITH CHECK (
+        auth.role() = 'service_role' OR (
+            auth.role() = 'authenticated' AND
+            user_id = auth.uid() AND
+            (project_id IS NULL OR project_id IN (
+                SELECT id FROM public.projects WHERE owner_id = auth.uid()
+            ))
+        )
+    );
 
--- RLS Policy: Only service role can update
+-- RLS Policy: Service role or notification owner can update
 CREATE POLICY "email_notifications_update_policy" ON public.email_notifications
-    FOR UPDATE USING (auth.role() = 'service_role');
+    FOR UPDATE USING (
+        auth.role() = 'service_role' OR user_id = auth.uid()
+    );
 
 COMMIT;
 
