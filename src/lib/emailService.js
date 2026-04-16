@@ -13,10 +13,10 @@ const BATCH_SIZE = parseInt(import.meta.env.VITE_EMAIL_BATCH_SIZE || '10')
 const MAX_RETRIES = parseInt(import.meta.env.VITE_MAX_EMAIL_RETRIES || '3')
 const RETRY_DELAY_MS = parseInt(import.meta.env.VITE_EMAIL_RETRY_DELAY_MS || '3600000') // 1 hour
 
-// Email templates as constants
+// Email templates as constants (using [PLACEHOLDER] syntax to avoid template evaluation)
 const EMAIL_TEMPLATES = {
   invoice: {
-    subject: 'Invoice #${invoiceNumber} - ${projectName}',
+    subject: 'Invoice #[INVOICE_NUMBER] - [PROJECT_NAME]',
     htmlTemplate: `
       <!DOCTYPE html>
       <html>
@@ -37,37 +37,37 @@ const EMAIL_TEMPLATES = {
           <div class="container">
             <div class="header">
               <h1>SolarTrack Pro</h1>
-              <p>Invoice for ${projectName}</p>
+              <p>Invoice for [PROJECT_NAME]</p>
             </div>
 
-            <p>Dear ${customerName},</p>
+            <p>Dear [CUSTOMER_NAME],</p>
 
             <p>Thank you for your business. Your invoice is ready for payment.</p>
 
             <div class="invoice-details">
               <div class="detail-row">
                 <span><strong>Invoice Number:</strong></span>
-                <span>${invoiceNumber}</span>
+                <span>[INVOICE_NUMBER]</span>
               </div>
               <div class="detail-row">
                 <span><strong>Project:</strong></span>
-                <span>${projectName}</span>
+                <span>[PROJECT_NAME]</span>
               </div>
               <div class="detail-row">
                 <span><strong>Invoice Date:</strong></span>
-                <span>${invoiceDate}</span>
+                <span>[INVOICE_DATE]</span>
               </div>
               <div class="detail-row">
                 <span><strong>Due Date:</strong></span>
-                <span>${dueDate}</span>
+                <span>[DUE_DATE]</span>
               </div>
               <div class="detail-row" style="margin-top: 10px; padding-top: 10px; border-top: 2px solid #667eea;">
                 <span style="font-size: 18px; font-weight: bold;">Amount Due:</span>
-                <span class="amount-due">${amount}</span>
+                <span class="amount-due">[AMOUNT]</span>
               </div>
             </div>
 
-            <a href="${viewLink}" class="cta-button">View Full Invoice</a>
+            <a href="[VIEW_LINK]" class="cta-button">View Full Invoice</a>
 
             <div class="footer">
               <p>If you have any questions about this invoice, please contact us.</p>
@@ -75,26 +75,26 @@ const EMAIL_TEMPLATES = {
               Email: support@solartrack.com<br/>
               Phone: +1 (800) 123-4567</p>
               <div class="unsubscribe">
-                <p><a href="${unsubscribeLink}">Unsubscribe</a> from invoice notifications</p>
+                <p><a href="[UNSUBSCRIBE_LINK]">Unsubscribe</a> from invoice notifications</p>
               </div>
             </div>
           </div>
         </body>
       </html>
     `,
-    textTemplate: `Invoice #\${invoiceNumber} - \${projectName}
+    textTemplate: `Invoice #\[INVOICE_NUMBER] - \[PROJECT_NAME]
 
-Dear \${customerName},
+Dear \[CUSTOMER_NAME],
 
 Thank you for your business. Your invoice is ready for payment.
 
-Invoice Number: \${invoiceNumber}
-Project: \${projectName}
-Invoice Date: \${invoiceDate}
-Due Date: \${dueDate}
-Amount Due: \${amount}
+Invoice Number: \[INVOICE_NUMBER]
+Project: \[PROJECT_NAME]
+Invoice Date: \[INVOICE_DATE]
+Due Date: \[DUE_DATE]
+Amount Due: \[AMOUNT]
 
-View Full Invoice: \${viewLink}
+View Full Invoice: \[VIEW_LINK]
 
 If you have any questions about this invoice, please contact us.
 
@@ -102,11 +102,11 @@ SolarTrack Pro
 Email: support@solartrack.com
 Phone: +1 (800) 123-4567
 
-\${unsubscribeLink}`
+\[UNSUBSCRIBE_LINK]`
   },
 
   reminder: {
-    subject: 'Task Reminder: ${taskTitle}',
+    subject: 'Task Reminder: [TASK_TITLE]',
     htmlTemplate: `
       <!DOCTYPE html>
       <html>
@@ -130,36 +130,36 @@ Phone: +1 (800) 123-4567
           <div class="container">
             <div class="header">
               <h1>Task Reminder</h1>
-              <p>${projectName}</p>
+              <p>[PROJECT_NAME]</p>
             </div>
 
-            <p>Hi ${recipientName},</p>
+            <p>Hi [RECIPIENT_NAME],</p>
 
             <p>You have a task due soon. Here are the details:</p>
 
             <div class="task-details">
               <div class="detail-row">
-                <span class="label">Task:</span> ${taskTitle}
+                <span class="label">Task:</span> [TASK_TITLE]
               </div>
               <div class="detail-row">
-                <span class="label">Description:</span> ${taskDescription}
+                <span class="label">Description:</span> [TASK_DESCRIPTION]
               </div>
               <div class="detail-row">
-                <span class="label">Project:</span> ${projectName}
+                <span class="label">Project:</span> [PROJECT_NAME]
               </div>
               <div class="detail-row">
-                <span class="label">Due Date:</span> ${dueDate}
+                <span class="label">Due Date:</span> [DUE_DATE]
               </div>
               <div class="detail-row">
                 <span class="label">Priority:</span>
-                <span class="priority priority-${priorityClass}">${priority}</span>
+                <span class="priority priority-[PRIORITY_CLASS]">[PRIORITY]</span>
               </div>
               <div class="detail-row">
-                <span class="label">Assigned To:</span> ${assignedTo}
+                <span class="label">Assigned To:</span> [ASSIGNED_TO]
               </div>
             </div>
 
-            <a href="${viewLink}" class="cta-button">View Task Details</a>
+            <a href="[VIEW_LINK]" class="cta-button">View Task Details</a>
 
             <div class="footer">
               <p>Please log in to SolarTrack Pro to update the task status.</p>
@@ -171,20 +171,20 @@ Phone: +1 (800) 123-4567
         </body>
       </html>
     `,
-    textTemplate: `Task Reminder: \${taskTitle}
+    textTemplate: `Task Reminder: \[TASK_TITLE]
 
-Hi \${recipientName},
+Hi \[RECIPIENT_NAME],
 
 You have a task due soon. Here are the details:
 
-Task: \${taskTitle}
-Description: \${taskDescription}
-Project: \${projectName}
-Due Date: \${dueDate}
-Priority: \${priority}
-Assigned To: \${assignedTo}
+Task: \[TASK_TITLE]
+Description: \[TASK_DESCRIPTION]
+Project: \[PROJECT_NAME]
+Due Date: \[DUE_DATE]
+Priority: \[PRIORITY]
+Assigned To: \[ASSIGNED_TO]
 
-View Task Details: \${viewLink}
+View Task Details: \[VIEW_LINK]
 
 Please log in to SolarTrack Pro to update the task status.
 
@@ -194,7 +194,7 @@ Phone: +1 (800) 123-4567`
   },
 
   status_update: {
-    subject: 'Project Status Update: ${projectName}',
+    subject: 'Project Status Update: [PROJECT_NAME]',
     htmlTemplate: `
       <!DOCTYPE html>
       <html>
@@ -222,35 +222,35 @@ Phone: +1 (800) 123-4567`
           <div class="container">
             <div class="header">
               <h1>Project Status Update</h1>
-              <p>${projectName}</p>
+              <p>[PROJECT_NAME]</p>
             </div>
 
-            <p>Hi ${customerName},</p>
+            <p>Hi [CUSTOMER_NAME],</p>
 
             <p>We have an important update on your project:</p>
 
             <div class="status-details">
               <div class="detail-row">
-                <span class="label">Project:</span> ${projectName}
+                <span class="label">Project:</span> [PROJECT_NAME]
               </div>
               <div class="detail-row">
                 <span class="label">Current Status:</span>
-                <span class="status-badge status-${statusClass}">${currentStatus}</span>
+                <span class="status-badge status-[STATUS_CLASS]">[CURRENT_STATUS]</span>
               </div>
               <div class="detail-row">
                 <span class="label">Completion:</span>
               </div>
               <div class="progress-bar">
-                <div class="progress-fill" style="width: ${completionPercent}%">${completionPercent}%</div>
+                <div class="progress-fill" style="width: [COMPLETION_PERCENT]%">[COMPLETION_PERCENT]%</div>
               </div>
               <div class="detail-row">
-                <span class="label">Updated At:</span> ${updateDate}
+                <span class="label">Updated At:</span> [UPDATE_DATE]
               </div>
             </div>
 
-            ${customMessage ? `<div class="message"><strong>Message:</strong><br/>${customMessage}</div>` : ''}
+            ${customMessage ? `<div class="message"><strong>Message:</strong><br/>[CUSTOM_MESSAGE]</div>` : ''}
 
-            <a href="${viewLink}" class="cta-button">View Project Details</a>
+            <a href="[VIEW_LINK]" class="cta-button">View Project Details</a>
 
             <div class="footer">
               <p>Have questions? Reply to this email or contact us directly.</p>
@@ -262,20 +262,20 @@ Phone: +1 (800) 123-4567`
         </body>
       </html>
     `,
-    textTemplate: `Project Status Update: \${projectName}
+    textTemplate: `Project Status Update: \[PROJECT_NAME]
 
-Hi \${customerName},
+Hi \[CUSTOMER_NAME],
 
 We have an important update on your project:
 
-Project: \${projectName}
-Current Status: \${currentStatus}
-Completion: \${completionPercent}%
-Updated At: \${updateDate}
+Project: \[PROJECT_NAME]
+Current Status: \[CURRENT_STATUS]
+Completion: \[COMPLETION_PERCENT]%
+Updated At: \[UPDATE_DATE]
 
-\${customMessage ? \`Message: \${customMessage}\` : ''}
+\${customMessage ? \`Message: \[CUSTOM_MESSAGE]\` : ''}
 
-View Project Details: \${viewLink}
+View Project Details: \[VIEW_LINK]
 
 Have questions? Reply to this email or contact us directly.
 
@@ -585,14 +585,14 @@ export async function queueInvoiceEmail(invoiceId, recipientEmail) {
       projectId: invoice.project_id,
       invoiceId: invoiceId,
       htmlBody: EMAIL_TEMPLATES.invoice.htmlTemplate
-        .replace(/\$\{invoiceNumber\}/g, invoice.invoice_number)
-        .replace(/\$\{projectName\}/g, project.project_name)
-        .replace(/\$\{customerName\}/g, 'Valued Customer')
-        .replace(/\$\{amount\}/g, `₹${invoice.total_amount.toLocaleString('en-IN')}`)
-        .replace(/\$\{invoiceDate\}/g, invoiceDate)
-        .replace(/\$\{dueDate\}/g, dueDate)
-        .replace(/\$\{viewLink\}/g, viewLink)
-        .replace(/\$\{unsubscribeLink\}/g, unsubscribeLink)
+        .replace(/\[INVOICE_NUMBER\]/g, invoice.invoice_number)
+        .replace(/\[PROJECT_NAME\]/g, project.project_name)
+        .replace(/\[CUSTOMER_NAME\]/g, 'Valued Customer')
+        .replace(/\[AMOUNT\]/g, `₹${invoice.total_amount.toLocaleString('en-IN')}`)
+        .replace(/\[INVOICE_DATE\]/g, invoiceDate)
+        .replace(/\[DUE_DATE\]/g, dueDate)
+        .replace(/\[VIEW_LINK\]/g, viewLink)
+        .replace(/\[UNSUBSCRIBE_LINK\]/g, unsubscribeLink)
     })
 
     return notificationId
