@@ -248,7 +248,7 @@ Phone: +1 (800) 123-4567`
               </div>
             </div>
 
-            ${customMessage ? `<div class="message"><strong>Message:</strong><br/>[CUSTOM_MESSAGE]</div>` : ''}
+            <div class="message" style="display: none;"><strong>Message:</strong><br/>[CUSTOM_MESSAGE]</div>
 
             <a href="[VIEW_LINK]" class="cta-button">View Project Details</a>
 
@@ -308,7 +308,7 @@ Phone: +1 (800) 123-4567`
               <p>Your platform for solar project management</p>
             </div>
 
-            <p>Hi ${userName},</p>
+            <p>Hi [USER_NAME],</p>
 
             <p>Welcome! We're excited to have you join SolarTrack Pro. This platform will help you manage your solar projects efficiently and professionally.</p>
 
@@ -331,7 +331,7 @@ Phone: +1 (800) 123-4567`
               </div>
             </div>
 
-            <a href="${gettingStartedLink}" class="cta-button">Get Started</a>
+            <a href="[GETTING_STARTED_LINK]" class="cta-button">Get Started</a>
 
             <div class="footer">
               <p>If you have any questions, our support team is here to help.</p>
@@ -345,7 +345,7 @@ Phone: +1 (800) 123-4567`
     `,
     textTemplate: `Welcome to SolarTrack Pro!
 
-Hi \${userName},
+Hi \[USER_NAME],
 
 Welcome! We're excited to have you join SolarTrack Pro. This platform will help you manage your solar projects efficiently and professionally.
 
@@ -363,7 +363,7 @@ Organize and manage project photos with GPS tagging and categories.
 Analytics & Reporting
 Track performance metrics and generate comprehensive reports.
 
-Get Started: \${gettingStartedLink}
+Get Started: \[GETTING_STARTED_LINK]
 
 If you have any questions, our support team is here to help.
 
