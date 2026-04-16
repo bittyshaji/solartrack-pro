@@ -4,7 +4,7 @@
  * Supports searching projects, customers, invoices
  */
 
-import { db } from '../config/database';
+import { db } from '../config/database.js';
 
 /**
  * Perform full-text search across specified content types

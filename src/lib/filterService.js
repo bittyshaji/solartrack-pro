@@ -3,7 +3,7 @@
  * Handles filter creation, application, and management
  */
 
-import { db } from '../config/database';
+import { db } from '../config/database.js';
 
 /**
  * Create a saved filter
