@@ -560,3 +560,34 @@ export async function importFilter(userId, filterJson) {
     throw error;
   }
 }
+
+/**
+ * Get available search filters for UI
+ * @param {string} filterType - Type of search (projects, customers, invoices)
+ * @returns {Array}
+ */
+export function getSearchFilters(filterType) {
+  // Return filter options for the advanced filter panel UI
+  const filterOptions = {
+    projects: [
+      { field: 'name', label: 'Project Name', operators: ['contains', 'startsWith', 'equals'] },
+      { field: 'status', label: 'Status', operators: ['equals', 'notEquals'], values: ['EST', 'NEG', 'EXE'] },
+      { field: 'estimated_value', label: 'Estimated Value', operators: ['gte', 'lte', 'between'] },
+      { field: 'created_at', label: 'Created Date', operators: ['gte', 'lte', 'between'] },
+    ],
+    customers: [
+      { field: 'name', label: 'Customer Name', operators: ['contains', 'startsWith', 'equals'] },
+      { field: 'email', label: 'Email', operators: ['contains', 'equals', 'isEmpty', 'isNotEmpty'] },
+      { field: 'phone', label: 'Phone', operators: ['contains', 'equals'] },
+      { field: 'is_active', label: 'Active', operators: ['equals'], values: [true, false] },
+    ],
+    invoices: [
+      { field: 'invoice_number', label: 'Invoice Number', operators: ['contains', 'equals'] },
+      { field: 'status', label: 'Status', operators: ['equals'], values: ['Pending', 'Paid', 'Overdue'] },
+      { field: 'total_amount', label: 'Amount', operators: ['gte', 'lte', 'between'] },
+      { field: 'due_date', label: 'Due Date', operators: ['gte', 'lte', 'between'] },
+    ],
+  };
+
+  return filterOptions[filterType] || [];
+}
