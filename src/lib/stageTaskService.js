@@ -5,6 +5,7 @@
  */
 
 import { supabase } from './supabase'
+import { queueTaskReminder } from './emailService'
 
 /**
  * Get all tasks for a specific stage and project
@@ -202,6 +203,24 @@ export async function createStageTask(taskData) {
       .single()
 
     if (error) throw error
+
+    // Queue task reminder email if assigned_to is specified (Phase 2B)
+    if (taskData.assigned_to && data?.id) {
+      try {
+        const { data: assignedUser } = await supabase
+          .from('users')
+          .select('email')
+          .eq('id', taskData.assigned_to)
+          .single()
+
+        if (assignedUser?.email) {
+          await queueTaskReminder(data.id, [assignedUser.email])
+        }
+      } catch (emailErr) {
+        console.warn('Failed to queue task reminder:', emailErr)
+      }
+    }
+
     return { success: true, data }
   } catch (err) {
     console.error('Error creating stage task:', err)

@@ -4,6 +4,7 @@
  */
 
 import { supabase } from './supabase'
+import { queueInvoiceEmail } from './emailService'
 
 /**
  * Generate invoice number
@@ -56,6 +57,31 @@ export async function createInvoice(projectId, proposalId, totalAmount) {
       .single()
 
     if (error) throw error
+
+    // Queue invoice email notification (Phase 2B)
+    try {
+      // Fetch customer email
+      const { data: project } = await supabase
+        .from('projects')
+        .select('customer_id')
+        .eq('id', projectId)
+        .single()
+
+      if (project?.customer_id) {
+        const { data: customer } = await supabase
+          .from('customers')
+          .select('email')
+          .eq('id', project.customer_id)
+          .single()
+
+        if (customer?.email) {
+          await queueInvoiceEmail(data.id, customer.email)
+        }
+      }
+    } catch (emailErr) {
+      console.warn('Failed to queue invoice email:', emailErr)
+    }
+
     return { success: true, data }
   } catch (err) {
     console.error('Error creating invoice:', err)

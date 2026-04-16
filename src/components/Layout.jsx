@@ -17,6 +17,9 @@ import {
   X,
   ChevronRight,
   BarChart3,
+  Mail,
+  Bell,
+  Settings,
 } from 'lucide-react'
 
 const navItems = [
@@ -26,6 +29,9 @@ const navItems = [
   { to: '/updates', icon: ClipboardList, label: 'Daily Updates' },
   { to: '/reports', icon: BarChart3, label: 'Reports', admin: true },
   { to: '/customer', icon: UserCircle, label: 'Customer Portal' },
+  { to: '/email-log', icon: Mail, label: 'Email Log', admin: true },
+  { to: '/notification-queue', icon: Bell, label: 'Notifications', admin: true },
+  { to: '/email-preferences', icon: Settings, label: 'Email Preferences' },
 ]
 
 export default function Layout({ children, title }) {

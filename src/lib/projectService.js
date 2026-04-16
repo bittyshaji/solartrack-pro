@@ -4,6 +4,7 @@
  */
 
 import { supabase } from './supabase'
+import { queueStatusUpdate } from './emailService'
 
 /**
  * PROJECT STATUS OPTIONS
@@ -245,7 +246,46 @@ export async function updateProjectState(id, state) {
   if (!PROJECT_STATES.includes(state)) {
     return { success: false, error: `Invalid state: ${state}. Must be one of: ${PROJECT_STATES.join(', ')}` }
   }
-  return updateProject(id, { project_state: state })
+
+  try {
+    // Get current project state for comparison
+    const project = await getProjectById(id)
+    const previousState = project?.project_state
+
+    // Update project state
+    const result = await updateProject(id, { project_state: state })
+
+    // Send status update email if state changed (Phase 2B)
+    if (result.success && previousState && previousState !== state) {
+      try {
+        // Get customer emails for this project
+        const { data: projectCustomers } = await supabase
+          .from('project_customers')
+          .select('customer_id(email)')
+          .eq('project_id', id)
+
+        const customerEmails = []
+        if (projectCustomers) {
+          projectCustomers.forEach(pc => {
+            if (pc.customer_id?.email && !customerEmails.includes(pc.customer_id.email)) {
+              customerEmails.push(pc.customer_id.email)
+            }
+          })
+        }
+
+        if (customerEmails.length > 0) {
+          await queueStatusUpdate(id, customerEmails, `Project status updated to ${state}`)
+        }
+      } catch (emailErr) {
+        console.warn('Failed to queue status update email:', emailErr)
+      }
+    }
+
+    return result
+  } catch (err) {
+    console.error('Error updating project state:', err)
+    return { success: false, error: err.message }
+  }
 }
 
 /**

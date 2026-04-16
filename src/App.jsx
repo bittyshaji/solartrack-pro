@@ -24,6 +24,11 @@ import Reports from './pages/Reports'
 import CustomerPortal from './pages/CustomerPortal'
 import SearchPage from './pages/SearchPage'
 
+// Phase 2B: Email & Notifications
+import EmailLog from './components/EmailLog'
+import NotificationQueue from './components/NotificationQueue'
+import EmailPreferences from './components/EmailPreferences'
+
 function App() {
   // Initialize PWA features on mount
   useEffect(() => {
@@ -55,6 +60,11 @@ function App() {
           <Route path="/reports" element={<ProtectedRoute requiredRole="admin"><Reports /></ProtectedRoute>} />
           <Route path="/customer" element={<ProtectedRoute><CustomerPortal /></ProtectedRoute>} />
           <Route path="/search" element={<ProtectedRoute><SearchPage /></ProtectedRoute>} />
+
+          {/* Phase 2B: Email & Notifications Routes */}
+          <Route path="/email-log" element={<ProtectedRoute requiredRole="admin"><EmailLog /></ProtectedRoute>} />
+          <Route path="/notification-queue" element={<ProtectedRoute requiredRole="admin"><NotificationQueue /></ProtectedRoute>} />
+          <Route path="/email-preferences" element={<ProtectedRoute><EmailPreferences /></ProtectedRoute>} />
 
           {/* Fallback */}
           <Route path="*" element={<Navigate to="/" replace />} />
