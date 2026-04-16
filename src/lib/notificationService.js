@@ -8,9 +8,11 @@ import { supabase } from './supabase'
 import {
   queueInvoiceEmail,
   queueTaskReminder,
-  queueStatusUpdate,
   sendEmailWithTemplate
 } from './emailService'
+
+// NOTE: queueStatusUpdate is disabled in Phase 2B
+// Status update emails are not currently used
 
 /**
  * Trigger invoice email
@@ -187,13 +189,14 @@ export async function triggerProjectStatusUpdate(projectId, previousStatus, newS
     // Build status message
     const statusMessage = message || getDefaultStatusMessage(previousStatus, newStatus)
 
-    // Queue status update emails
-    const notificationIds = await queueStatusUpdate(projectId, customerEmails, statusMessage)
+    // NOTE: Status update emails disabled in Phase 2B
+    // queueStatusUpdate is no longer available - feature removed per user request
+    // const notificationIds = await queueStatusUpdate(projectId, customerEmails, statusMessage)
 
     console.log(`Project status update triggered: ${previousStatus} -> ${newStatus}`)
     logTriggerEvent('project_status_update', projectId, projectId, customerEmails.join(', '))
 
-    return notificationIds
+    return []  // No notifications sent (feature disabled)
   } catch (error) {
     console.error('Error triggering project status update:', error)
     return []
