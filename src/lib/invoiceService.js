@@ -7,6 +7,11 @@ import { supabase } from './supabase'
 import { queueInvoiceEmail } from './emailService'
 
 /**
+ * PHASE 2B NOTE: Email triggering is now MANUAL (button-based) instead of automatic.
+ * Use sendInvoiceEmail() to manually trigger email notifications.
+ */
+
+/**
  * Generate invoice number
  * @returns {string}
  */
@@ -58,29 +63,8 @@ export async function createInvoice(projectId, proposalId, totalAmount) {
 
     if (error) throw error
 
-    // Queue invoice email notification (Phase 2B)
-    try {
-      // Fetch customer email
-      const { data: project } = await supabase
-        .from('projects')
-        .select('customer_id')
-        .eq('id', projectId)
-        .single()
-
-      if (project?.customer_id) {
-        const { data: customer } = await supabase
-          .from('customers')
-          .select('email')
-          .eq('id', project.customer_id)
-          .single()
-
-        if (customer?.email) {
-          await queueInvoiceEmail(data.id, customer.email)
-        }
-      }
-    } catch (emailErr) {
-      console.warn('Failed to queue invoice email:', emailErr)
-    }
+    // NOTE: Email notification is now MANUAL (button-based) instead of automatic
+    // To send email, call sendInvoiceEmail(invoiceId, customerEmail) manually
 
     return { success: true, data }
   } catch (err) {
@@ -167,6 +151,16 @@ export async function updateInvoicePayment(invoiceId, paidAmount) {
     console.error('Error updating invoice payment:', err)
     return { success: false, error: err.message }
   }
+}
+
+/**
+ * Send invoice email manually (button-based)
+ * @param {string} invoiceId - Invoice ID
+ * @param {string} recipientEmail - Recipient email address
+ * @returns {Promise<string|null>} Notification ID or null
+ */
+export async function sendInvoiceEmail(invoiceId, recipientEmail) {
+  return await queueInvoiceEmail(invoiceId, recipientEmail)
 }
 
 /**

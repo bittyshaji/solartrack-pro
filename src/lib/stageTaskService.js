@@ -8,6 +8,11 @@ import { supabase } from './supabase'
 import { queueTaskReminder } from './emailService'
 
 /**
+ * PHASE 2B NOTE: Email triggering is now MANUAL (button-based) instead of automatic.
+ * Use sendTaskReminder() to manually trigger task reminder emails.
+ */
+
+/**
  * Get all tasks for a specific stage and project
  * @param {number} stageId - Stage ID (1-10)
  * @param {string} projectId - Project ID (required for filtering by project)
@@ -204,22 +209,8 @@ export async function createStageTask(taskData) {
 
     if (error) throw error
 
-    // Queue task reminder email if assigned_to is specified (Phase 2B)
-    if (taskData.assigned_to && data?.id) {
-      try {
-        const { data: assignedUser } = await supabase
-          .from('users')
-          .select('email')
-          .eq('id', taskData.assigned_to)
-          .single()
-
-        if (assignedUser?.email) {
-          await queueTaskReminder(data.id, [assignedUser.email])
-        }
-      } catch (emailErr) {
-        console.warn('Failed to queue task reminder:', emailErr)
-      }
-    }
+    // NOTE: Email notification is now MANUAL (button-based) instead of automatic
+    // To send reminder email, call sendTaskReminder(taskId, recipientEmails) manually
 
     return { success: true, data }
   } catch (err) {
@@ -360,4 +351,14 @@ export function calculateEstimate(selectedStageIds, allTasks) {
   })
 
   return { stageTotals, grandTotal }
+}
+
+/**
+ * Send task reminder email manually (button-based)
+ * @param {string} taskId - Task ID
+ * @param {Array<string>} recipientEmails - Recipient email addresses
+ * @returns {Promise<Array<string>>} Array of notification IDs
+ */
+export async function sendTaskReminder(taskId, recipientEmails = []) {
+  return await queueTaskReminder(taskId, recipientEmails)
 }
