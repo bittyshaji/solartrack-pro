@@ -62,8 +62,8 @@ function App() {
           <Route path="/search" element={<ProtectedRoute><SearchPage /></ProtectedRoute>} />
 
           {/* Phase 2B: Email & Notifications Routes */}
-          <Route path="/email-log" element={<ProtectedRoute requiredRole="admin"><EmailLog /></ProtectedRoute>} />
-          <Route path="/notification-queue" element={<ProtectedRoute requiredRole="admin"><NotificationQueue /></ProtectedRoute>} />
+          <Route path="/email-log" element={<ProtectedRoute><EmailLog /></ProtectedRoute>} />
+          <Route path="/notification-queue" element={<ProtectedRoute><NotificationQueue /></ProtectedRoute>} />
           <Route path="/email-preferences" element={<ProtectedRoute><EmailPreferences /></ProtectedRoute>} />
 
           {/* Fallback */}
