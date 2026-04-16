@@ -673,53 +673,54 @@ export async function queueTaskReminder(taskId, recipientEmails = []) {
  * @param {string} message - Custom message
  * @returns {Promise<Array<string>>} Array of notification IDs
  */
-export async function queueStatusUpdate(projectId, customerEmails = [], message = '') {
-  try {
-    // Fetch project details
-    const { data: project, error: projectError } = await supabase
-      .from('projects')
-      .select('*')
-      .eq('id', projectId)
-      .single()
-
-    if (projectError) throw projectError
-    if (!project) throw new Error('Project not found')
-
-    const statusClass = (project.current_stage || 'EST').toLowerCase()
-    const updateDate = new Date().toLocaleDateString('en-IN')
-    const viewLink = `${window.location.origin}/projects/${projectId}`
-    const completionPercent = project.completion_percentage || 0
-
-    const notificationIds = []
-
-    for (const email of customerEmails) {
-      const notificationId = await queueEmailNotification({
-        recipient: email,
-        emailType: 'status_update',
-        subject: `Project Status Update: ${project.project_name}`,
-        projectId: projectId,
-        htmlBody: EMAIL_TEMPLATES.status_update.htmlTemplate
-          .replace(/\$\{projectName\}/g, project.project_name)
-          .replace(/\$\{currentStatus\}/g, project.current_stage || 'EST')
-          .replace(/\$\{statusClass\}/g, statusClass)
-          .replace(/\$\{completionPercent\}/g, completionPercent)
-          .replace(/\$\{customMessage\}/g, message)
-          .replace(/\$\{updateDate\}/g, updateDate)
-          .replace(/\$\{customerName\}/g, 'Valued Customer')
-          .replace(/\$\{viewLink\}/g, viewLink)
-      })
-
-      if (notificationId) {
-        notificationIds.push(notificationId)
-      }
-    }
-
-    return notificationIds
-  } catch (error) {
-    console.error('Error queuing status update:', error)
-    return []
-  }
-}
+// DISABLED: Status update emails are not currently used
+// export async function queueStatusUpdate(projectId, customerEmails = [], message = '') {
+//   try {
+//     // Fetch project details
+//     const { data: project, error: projectError } = await supabase
+//       .from('projects')
+//       .select('*')
+//       .eq('id', projectId)
+//       .single()
+//
+//     if (projectError) throw projectError
+//     if (!project) throw new Error('Project not found')
+//
+//     const statusClass = (project.current_stage || 'EST').toLowerCase()
+//     const updateDate = new Date().toLocaleDateString('en-IN')
+//     const viewLink = `${window.location.origin}/projects/${projectId}`
+//     const completionPercent = project.completion_percentage || 0
+//
+//     const notificationIds = []
+//
+//     for (const email of customerEmails) {
+//       const notificationId = await queueEmailNotification({
+//         recipient: email,
+//         emailType: 'status_update',
+//         subject: `Project Status Update: ${project.project_name}`,
+//         projectId: projectId,
+//         htmlBody: EMAIL_TEMPLATES.status_update.htmlTemplate
+//           .replace(/\$\{projectName\}/g, project.project_name)
+//           .replace(/\$\{currentStatus\}/g, project.current_stage || 'EST')
+//           .replace(/\$\{statusClass\}/g, statusClass)
+//           .replace(/\$\{completionPercent\}/g, completionPercent)
+//           .replace(/\$\{customMessage\}/g, message)
+//           .replace(/\$\{updateDate\}/g, updateDate)
+//           .replace(/\$\{customerName\}/g, 'Valued Customer')
+//           .replace(/\$\{viewLink\}/g, viewLink)
+//       })
+//
+//       if (notificationId) {
+//         notificationIds.push(notificationId)
+//       }
+//     }
+//
+//     return notificationIds
+//   } catch (error) {
+//     console.error('Error queuing status update:', error)
+//     return []
+//   }
+// }
 
 /**
  * Schedule email notification for delayed sending
