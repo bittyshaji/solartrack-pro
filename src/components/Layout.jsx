@@ -80,7 +80,7 @@ export default function Layout({ children, title }) {
         </div>
 
         {/* Nav Links */}
-        <nav className="flex-1 py-4 space-y-1 px-2">
+        <nav className="flex-1 py-4 space-y-1 px-2 overflow-y-auto">
           {navItems
             .filter(item => !item.admin || userRole === 'admin')
             .map(({ to, icon: Icon, label }) => (
