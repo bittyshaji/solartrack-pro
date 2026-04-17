@@ -131,21 +131,14 @@ export default function Layout({ children, title }) {
                   {sidebarOpen && expandedMenu === label && (
                     <div className="ml-4 mt-1 space-y-0.5 border-l border-gray-700 pl-3">
                       {subItems.map(({ to: subTo, icon: SubIcon, label: subLabel }) => (
-                        <NavLink
-                          key={subTo}
-                          to={subTo}
-                          end={subTo === '/projects'}
-                          className={({ isActive }) =>
-                            `flex items-center gap-2 px-3 py-2 rounded-lg transition-colors text-xs font-medium ${
-                              isActive
-                                ? 'bg-gray-700 text-orange-400'
-                                : 'text-gray-500 hover:bg-gray-800 hover:text-gray-300'
-                            }`
-                          }
+                        <button
+                          key={subTo + subLabel}
+                          onClick={() => navigate(subTo)}
+                          className="w-full flex items-center gap-2 px-3 py-2 rounded-lg transition-colors text-xs font-medium text-gray-500 hover:bg-gray-800 hover:text-gray-300"
                         >
                           <SubIcon className="w-4 h-4 flex-shrink-0" />
                           <span>{subLabel}</span>
-                        </NavLink>
+                        </button>
                       ))}
                     </div>
                   )}
