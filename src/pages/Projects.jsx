@@ -163,7 +163,7 @@ export default function Projects() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {filtered.map(project => (
-              <div key={project.id} className="bg-white rounded-lg shadow p-6 hover:shadow-lg transition">
+              <div key={project.id} onClick={() => navigate(`/projects/${project.id}`)} className="bg-white rounded-lg shadow p-6 hover:shadow-lg transition cursor-pointer">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex-1">
                     <h3 className="font-semibold text-gray-900">{project.name}</h3>
