@@ -1,0 +1,93 @@
+================================================================================
+SUPABASE MIGRATION - EXECUTION SUMMARY
+================================================================================
+
+PROJECT:      SolarTrackPro Phase 3 & 4 Database Migration
+TARGET DB:    opzoighusosmxcyneifc (Supabase PostgreSQL)
+MIGRATION:    COMBINED_PHASE3_PHASE4_MIGRATION.sql
+DATE:         April 17, 2026
+STATUS:       READY FOR EXECUTION (Manual Required)
+
+================================================================================
+KEY FINDINGS
+================================================================================
+
+1. MIGRATION SCOPE
+   - 25+ new tables (12 modules)
+   - 46 performance indexes
+   - 67 Row Level Security (RLS) policies
+   - 3 trigger functions
+   - Comprehensive data validation and constraints
+
+2. MODULES COVERED
+   - Site Surveys (Contractor #2)
+   - Follow-up Tracker (Contractor #4)
+   - Project Security Status (Contractor #5)
+   - KSEB Feasibility Submissions (Contractor #6)
+   - Construction Stage Checklists (Contractor #8)
+   - Staff Attendance & Wage Management (Contractor #9)
+   - Completion Certificates (Contractor #11)
+   - KSEB Energisation (Contractor #12)
+   - Payment Workflow (Contractor #14, #16)
+   - Handover Documents (Contractor #15)
+   - Warranty Management (Contractor #17)
+   - Service Request Management (Contractor #18)
+
+3. WHY MANUAL EXECUTION IS NEEDED
+   - The anon key cannot execute DDL (CREATE TABLE, etc.)
+   - Service Role Key or Dashboard access required
+   - Use the Supabase Dashboard SQL Editor (easiest method)
+
+================================================================================
+HOW TO RUN THE MIGRATION
+================================================================================
+
+METHOD 1 - Supabase Dashboard (Recommended, 5 minutes):
+
+1. Go to https://app.supabase.com
+2. Select your project (opzoighusosmxcyneifc)
+3. Click "SQL Editor" in the left sidebar
+4. Click "New Query"
+5. Open COMBINED_PHASE3_PHASE4_MIGRATION.sql from this folder
+6. Copy the entire contents and paste into the SQL Editor
+7. Click "Run" (green play button)
+8. Wait 2-10 seconds for completion
+9. You should see "Success" with no errors
+
+METHOD 2 - Verify After Running:
+
+Run this query in the SQL Editor to confirm all tables were created:
+
+SELECT table_name
+FROM information_schema.tables
+WHERE table_schema = 'public'
+AND table_name IN (
+  'site_surveys', 'followups', 'followup_history',
+  'project_security_status', 'project_security_requirements',
+  'kseb_feasibility_submissions', 'kseb_feasibility_documents',
+  'kseb_activity_logs', 'construction_stage_metrics', 'stage_checklists',
+  'staff_members', 'attendance_logs', 'wage_payments',
+  'completion_certificates', 'kseb_energisation_visits',
+  'payment_stages', 'payment_receipts',
+  'handover_documents', 'project_warranties', 'warranty_claims',
+  'warranty_expiry_reminders', 'customer_service_requests',
+  'service_request_history'
+)
+ORDER BY table_name;
+
+Expected: 23+ tables listed
+
+================================================================================
+TROUBLESHOOTING
+================================================================================
+
+Issue: "relation 'projects' does not exist"
+Fix: Phase 1 & 2 migrations must be run first.
+
+Issue: "permission denied"
+Fix: Make sure you're using the SQL Editor in the Dashboard (not REST API).
+
+Issue: "duplicate key value violates unique constraint"
+Fix: Table already exists from a previous run. Safe to ignore or DROP first.
+
+================================================================================

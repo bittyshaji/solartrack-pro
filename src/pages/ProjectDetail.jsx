@@ -21,6 +21,19 @@ import CustomerInfoBanner from '../components/CustomerInfoBanner'
 import PhotoUploadSection from '../components/PhotoUploadSection'
 import ProjectUpdates from '../components/ProjectUpdates'
 
+// Phase 3 & 4: Contractor Requirement Panels
+import SiteSurveyPanel from '../components/SiteSurveyPanel'
+import StageChecklistPanel from '../components/StageChecklistPanel'
+import FollowupPanel from '../components/FollowupPanel'
+import ProjectSecurePanel from '../components/ProjectSecurePanel'
+import KSEBFeasibilityPanel from '../components/KSEBFeasibilityPanel'
+import KSEBEnergisationPanel from '../components/KSEBEnergisationPanel'
+import CompletionCertificatePanel from '../components/CompletionCertificatePanel'
+import HandoverDocumentPanel from '../components/HandoverDocumentPanel'
+import WarrantyPanel from '../components/WarrantyPanel'
+import ServiceRequestPanel from '../components/ServiceRequestPanel'
+import PaymentWorkflowPanel from '../components/PaymentWorkflowPanel'
+
 export default function ProjectDetail() {
   const { id } = useParams()
   const navigate = useNavigate()
@@ -458,6 +471,131 @@ export default function ProjectDetail() {
           {id && (
             <div className="mt-8 mb-8">
               <ProjectUpdates projectId={id} projectName={project?.name} />
+            </div>
+          )}
+
+          {/* ═══════════════════════════════════════════════ */}
+          {/* Phase 3 & 4: Contractor Requirement Panels     */}
+          {/* ═══════════════════════════════════════════════ */}
+
+          {/* Site Survey */}
+          {id && (
+            <div className="mt-8 mb-8 bg-white rounded-lg shadow p-6">
+              <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <MapPin className="w-5 h-5 text-blue-600" />
+                Site Survey
+              </h2>
+              <SiteSurveyPanel projectId={id} />
+            </div>
+          )}
+
+          {/* Stage Checklists & Progress */}
+          {id && (
+            <div className="mt-8 mb-8 bg-white rounded-lg shadow p-6">
+              <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <Package className="w-5 h-5 text-green-600" />
+                Construction Stage Checklists
+              </h2>
+              <StageChecklistPanel projectId={id} currentStage={project?.stage || 1} />
+            </div>
+          )}
+
+          {/* Followup Tracker */}
+          {id && (
+            <div className="mt-8 mb-8 bg-white rounded-lg shadow p-6">
+              <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <Calendar className="w-5 h-5 text-orange-600" />
+                Follow-up Tracker
+              </h2>
+              <FollowupPanel projectId={id} />
+            </div>
+          )}
+
+          {/* Project Secure */}
+          {id && (
+            <div className="mt-8 mb-8 bg-white rounded-lg shadow p-6">
+              <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <Zap className="w-5 h-5 text-purple-600" />
+                Project Security & Order Confirmation
+              </h2>
+              <ProjectSecurePanel projectId={id} />
+            </div>
+          )}
+
+          {/* KSEB Feasibility */}
+          {id && (
+            <div className="mt-8 mb-8 bg-white rounded-lg shadow p-6">
+              <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <Zap className="w-5 h-5 text-yellow-600" />
+                KSEB Feasibility Submission
+              </h2>
+              <KSEBFeasibilityPanel projectId={id} />
+            </div>
+          )}
+
+          {/* KSEB Energisation */}
+          {id && (
+            <div className="mt-8 mb-8 bg-white rounded-lg shadow p-6">
+              <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <Zap className="w-5 h-5 text-red-600" />
+                KSEB Energisation & Inspection
+              </h2>
+              <KSEBEnergisationPanel projectId={id} />
+            </div>
+          )}
+
+          {/* Completion Certificate */}
+          {id && (
+            <div className="mt-8 mb-8 bg-white rounded-lg shadow p-6">
+              <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <Edit2 className="w-5 h-5 text-teal-600" />
+                Completion Certificate
+              </h2>
+              <CompletionCertificatePanel projectId={id} />
+            </div>
+          )}
+
+          {/* Payment Workflow */}
+          {id && (
+            <div className="mt-8 mb-8 bg-white rounded-lg shadow p-6">
+              <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <Users className="w-5 h-5 text-green-600" />
+                Payment Stages
+              </h2>
+              <PaymentWorkflowPanel projectId={id} totalAmount={project?.total_amount || 0} />
+            </div>
+          )}
+
+          {/* Handover Document */}
+          {id && (
+            <div className="mt-8 mb-8 bg-white rounded-lg shadow p-6">
+              <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <Package className="w-5 h-5 text-indigo-600" />
+                Handover Document
+              </h2>
+              <HandoverDocumentPanel projectId={id} />
+            </div>
+          )}
+
+          {/* Warranty Management */}
+          {id && (
+            <div className="mt-8 mb-8 bg-white rounded-lg shadow p-6">
+              <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <Zap className="w-5 h-5 text-blue-600" />
+                Warranty Management
+              </h2>
+              <WarrantyPanel projectId={id} />
+            </div>
+          )}
+
+          {/* Service Requests */}
+          {id && (
+            <div className="mt-8 mb-8 bg-white rounded-lg shadow p-6">
+              <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <Users className="w-5 h-5 text-orange-600" />
+                Service Requests & Customer Issues
+              </h2>
+              <ServiceRequestPanel projectId={id} />
             </div>
           )}
           </div>

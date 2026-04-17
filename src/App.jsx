@@ -29,6 +29,9 @@ import EmailLog from './components/EmailLog'
 import NotificationQueue from './components/NotificationQueue'
 import EmailPreferences from './components/EmailPreferences'
 
+// Phase 3 & 4: Contractor Requirement Modules
+import StaffAttendance from './pages/StaffAttendance'
+
 function App() {
   // Initialize PWA features on mount
   useEffect(() => {
@@ -65,6 +68,9 @@ function App() {
           <Route path="/email-log" element={<ProtectedRoute><EmailLog /></ProtectedRoute>} />
           <Route path="/notification-queue" element={<ProtectedRoute><NotificationQueue /></ProtectedRoute>} />
           <Route path="/email-preferences" element={<ProtectedRoute><EmailPreferences /></ProtectedRoute>} />
+
+          {/* Phase 3 & 4: Contractor Requirement Routes */}
+          <Route path="/staff-attendance" element={<ProtectedRoute requiredRole="admin"><StaffAttendance /></ProtectedRoute>} />
 
           {/* Fallback */}
           <Route path="*" element={<Navigate to="/" replace />} />

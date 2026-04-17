@@ -20,6 +20,7 @@ import {
   Mail,
   Bell,
   Settings,
+  CalendarClock,
 } from 'lucide-react'
 
 const navItems = [
@@ -27,6 +28,7 @@ const navItems = [
   { to: '/projects', icon: FolderKanban, label: 'Projects' },
   { to: '/team', icon: Users, label: 'Team' },
   { to: '/updates', icon: ClipboardList, label: 'Daily Updates' },
+  { to: '/staff-attendance', icon: CalendarClock, label: 'Attendance', admin: true },
   { to: '/reports', icon: BarChart3, label: 'Reports', admin: true },
   { to: '/customer', icon: UserCircle, label: 'Customer Portal' },
   { to: '/email-log', icon: Mail, label: 'Email Log', admin: true },
