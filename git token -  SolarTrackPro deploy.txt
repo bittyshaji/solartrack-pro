@@ -1,4 +1,0 @@
-git token -  SolarTrackPro deploy
-
-
-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
