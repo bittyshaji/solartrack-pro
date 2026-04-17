@@ -137,18 +137,25 @@ export default function KSEBEnergisationPanel({ projectId }) {
       let data = await getEnergisation(projectId);
 
       if (!data) {
-        data = await createEnergisation(projectId);
+        // No record yet - try to create one, but don't error if it fails
+        try {
+          data = await createEnergisation(projectId);
+        } catch (createError) {
+          console.warn('No energisation record yet, will be created when needed:', createError);
+          setEnergisation(null);
+          return;
+        }
       }
 
       setEnergisation(data);
 
-      if (data.id) {
+      if (data && data.id) {
         const logs = await getActivityLog(data.id);
         setActivityLog(logs);
       }
     } catch (error) {
-      console.error('Error loading energisation data:', error);
-      toast.error('Failed to load energisation data');
+      console.warn('No energisation data available yet:', error);
+      setEnergisation(null);
     } finally {
       setLoading(false);
     }

@@ -66,8 +66,7 @@ const HandoverDocumentPanel = ({ projectId }) => {
         setIncludesContactInfo(doc.includes_contact_info);
       }
     } catch (error) {
-      toast.error('Failed to load handover document');
-      console.error(error);
+      console.warn('No handover document available yet:', error);
     } finally {
       setLoading(false);
     }

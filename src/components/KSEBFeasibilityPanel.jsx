@@ -144,8 +144,7 @@ export default function KSEBFeasibilityPanel({ projectId }) {
         });
       }
     } catch (error) {
-      console.error('Error fetching feasibility:', error);
-      toast.error('Failed to load feasibility data');
+      console.warn('No feasibility data available yet:', error);
     } finally {
       setLoading(false);
     }

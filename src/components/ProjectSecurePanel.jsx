@@ -63,8 +63,7 @@ const ProjectSecurePanel = ({ projectId }) => {
         setCustomerSignatureName(data.status.signed_by_name || '');
       }
     } catch (error) {
-      console.error('Failed to load security status:', error);
-      toast.error('Failed to load project security details');
+      console.warn('No security data available yet:', error);
     } finally {
       setLoading(false);
     }

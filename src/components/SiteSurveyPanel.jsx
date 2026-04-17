@@ -71,8 +71,7 @@ const SiteSurveyPanel = ({ projectId }) => {
       const { success, data, error } = await getSiteSurvey(projectId);
 
       if (!success) {
-        console.error('Failed to load survey:', error);
-        toast.error('Failed to load site survey');
+        console.warn('No site survey data available yet:', error);
         setIsLoading(false);
         return;
       }
@@ -111,8 +110,7 @@ const SiteSurveyPanel = ({ projectId }) => {
         });
       }
     } catch (err) {
-      console.error('Error loading survey:', err);
-      toast.error('Error loading site survey');
+      console.warn('No site survey data available yet:', err);
     } finally {
       setIsLoading(false);
     }

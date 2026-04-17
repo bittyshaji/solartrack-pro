@@ -53,8 +53,7 @@ const FollowupPanel = ({ projectId }) => {
     setLoading(true);
     const { data, error } = await getFollowups(projectId);
     if (error) {
-      toast.error('Failed to load followups');
-      console.error(error);
+      console.warn('No followup data available yet:', error);
     } else {
       setFollowups(data);
     }

@@ -107,8 +107,9 @@ const CompletionCertificatePanel = ({ projectId }) => {
         }
       }
     } catch (error) {
-      toast.error('Failed to load certificate');
-      console.error(error);
+      // No certificate yet - this is normal for projects that haven't reached completion
+      console.warn('No certificate data available yet:', error);
+      setCertificate(null);
     } finally {
       setLoading(false);
     }

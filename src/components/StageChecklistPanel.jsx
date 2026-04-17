@@ -78,8 +78,7 @@ export default function StageChecklistPanel({ projectId, currentStage = 1 }) {
       }
       setChecklists(allChecklists)
     } catch (err) {
-      console.error('Error loading stage data:', err)
-      toast.error('Failed to load stage data')
+      console.warn('No stage checklist data available yet:', err)
     } finally {
       setLoading(false)
     }

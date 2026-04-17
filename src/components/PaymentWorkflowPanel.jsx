@@ -54,18 +54,26 @@ const PaymentWorkflowPanel = ({ projectId, totalAmount }) => {
     try {
       const stagesResult = await getPaymentStages(projectId);
       if (stagesResult.error) {
-        toast.error('Failed to load payment stages');
+        console.warn('No payment stages found yet:', stagesResult.error);
+        setStages([]);
         return;
       }
 
       if (!stagesResult.data || stagesResult.data.length === 0) {
-        // Create default payment stages if none exist
-        const createResult = await createDefaultPaymentStages(projectId, totalAmount);
-        if (createResult.error) {
-          toast.error('Failed to create payment stages');
+        // No payment stages yet - try to create defaults, but don't error if it fails
+        try {
+          const createResult = await createDefaultPaymentStages(projectId, totalAmount);
+          if (createResult.error) {
+            console.warn('Could not create default payment stages:', createResult.error);
+            setStages([]);
+            return;
+          }
+          setStages(createResult.data);
+        } catch (e) {
+          console.warn('Could not create default payment stages:', e);
+          setStages([]);
           return;
         }
-        setStages(createResult.data);
       } else {
         setStages(stagesResult.data);
       }

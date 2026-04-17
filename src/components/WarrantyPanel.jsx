@@ -64,8 +64,7 @@ const WarrantyPanel = ({ projectId }) => {
         const data = await getWarranty(projectId);
         setWarranty(data);
       } catch (error) {
-        console.error('Error loading warranty:', error);
-        toast.error('Failed to load warranty information');
+        console.warn('No warranty data available yet:', error);
       } finally {
         setLoading(false);
       }

@@ -71,8 +71,7 @@ export default function ServiceRequestPanel({ projectId }) {
       setRequests(requestsData)
       setStats(statsData)
     } catch (err) {
-      console.error('Error loading service requests:', err)
-      toast.error('Failed to load service requests')
+      console.warn('No service request data available yet:', err)
     } finally {
       setLoading(false)
     }

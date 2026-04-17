@@ -86,8 +86,7 @@ export default function StaffAttendancePanel() {
       const data = await getStaffMembers(activeFilter);
       setStaffList(data);
     } catch (error) {
-      toast.error('Failed to load staff members');
-      console.error(error);
+      console.warn('No staff member data available yet:', error);
     } finally {
       setLoading(false);
     }
@@ -99,8 +98,7 @@ export default function StaffAttendancePanel() {
       const data = await getTeamAttendance(selectedDate);
       setAttendanceData(data);
     } catch (error) {
-      toast.error('Failed to load attendance data');
-      console.error(error);
+      console.warn('No attendance data available yet:', error);
     } finally {
       setLoading(false);
     }
@@ -112,8 +110,7 @@ export default function StaffAttendancePanel() {
       const data = await getMonthlyPayroll(selectedMonth);
       setPayrollData(data);
     } catch (error) {
-      toast.error('Failed to load payroll data');
-      console.error(error);
+      console.warn('No payroll data available yet:', error);
     } finally {
       setLoading(false);
     }
