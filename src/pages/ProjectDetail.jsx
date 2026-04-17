@@ -7,7 +7,7 @@ import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import Layout from '../components/Layout'
 import HomeButton from '../components/HomeButton'
-import { ArrowLeft, Edit2, Save, X, Calendar, Zap, MapPin, Users, Package } from 'lucide-react'
+import { ArrowLeft, Edit2, Save, X, Calendar, Zap, MapPin, Users, Package, ClipboardCheck, FileText, Shield, CreditCard, Award, Wrench, Phone, Camera, Truck, MessageSquare, ChevronDown } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { getProjectDetail, updateProjectDetail, getProjectMaterials, getProjectProgress } from '../lib/projectDetailService'
 import { PROJECT_STAGES, PROJECT_STATES, updateProjectState } from '../lib/projectService'
@@ -434,53 +434,71 @@ export default function ProjectDetail() {
             </div>
           </div>
 
-          {/* Unified State-Based Panel */}
-          <UnifiedProposalPanel
-            state={projectState}
-            projectId={id}
-            project={project}
-            onStateChange={(newState) => {
-              handleStateTransition(newState)
-            }}
-          />
+          {/* ═══════════════════════════════════════════════════════════ */}
+          {/* IN-PAGE SECTION NAVIGATION                                  */}
+          {/* ═══════════════════════════════════════════════════════════ */}
+          {id && (
+            <div className="mb-8 bg-white rounded-lg shadow p-4 sticky top-0 z-10">
+              <div className="flex items-center gap-2 mb-3">
+                <ChevronDown className="w-4 h-4 text-gray-500" />
+                <span className="text-sm font-semibold text-gray-700">Jump to Section</span>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {[
+                  { id: 'sec-followups', label: 'Follow-ups', color: 'bg-orange-50 text-orange-700 hover:bg-orange-100' },
+                  { id: 'sec-site-survey', label: 'Site Survey', color: 'bg-blue-50 text-blue-700 hover:bg-blue-100' },
+                  { id: 'sec-estimation', label: 'Estimation & Proposal', color: 'bg-purple-50 text-purple-700 hover:bg-purple-100' },
+                  { id: 'sec-order-confirm', label: 'Order Confirmation', color: 'bg-indigo-50 text-indigo-700 hover:bg-indigo-100' },
+                  { id: 'sec-payments', label: 'Payments', color: 'bg-green-50 text-green-700 hover:bg-green-100' },
+                  { id: 'sec-kseb-feasibility', label: 'KSEB Feasibility', color: 'bg-yellow-50 text-yellow-700 hover:bg-yellow-100' },
+                  { id: 'sec-checklists', label: 'Stage Checklists', color: 'bg-teal-50 text-teal-700 hover:bg-teal-100' },
+                  { id: 'sec-materials', label: 'Materials', color: 'bg-amber-50 text-amber-700 hover:bg-amber-100' },
+                  { id: 'sec-photos', label: 'Photos', color: 'bg-pink-50 text-pink-700 hover:bg-pink-100' },
+                  { id: 'sec-daily-updates', label: 'Daily Updates', color: 'bg-cyan-50 text-cyan-700 hover:bg-cyan-100' },
+                  { id: 'sec-kseb-energisation', label: 'KSEB Energisation', color: 'bg-red-50 text-red-700 hover:bg-red-100' },
+                  { id: 'sec-certificate', label: 'Completion Certificate', color: 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100' },
+                  { id: 'sec-handover', label: 'Handover', color: 'bg-violet-50 text-violet-700 hover:bg-violet-100' },
+                  { id: 'sec-warranty', label: 'Warranty', color: 'bg-sky-50 text-sky-700 hover:bg-sky-100' },
+                  { id: 'sec-service', label: 'Service Requests', color: 'bg-rose-50 text-rose-700 hover:bg-rose-100' },
+                ].map(section => (
+                  <button
+                    key={section.id}
+                    onClick={() => document.getElementById(section.id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+                    className={`px-3 py-1.5 rounded-full text-xs font-medium transition ${section.color} border border-transparent`}
+                  >
+                    {section.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
 
-          {/* Proposal History - Always Visible */}
-          <div className="mt-8 bg-white rounded-lg shadow p-6">
-            <ProposalHistory
-              key={historyRefreshKey}
-              projectId={id}
-              project={project}
-            />
+          {/* ═══════════════════════════════════════════════════════════ */}
+          {/* PHASE 1: PRE-SALES                                        */}
+          {/* Follow-ups → Site Survey → Estimation/Proposal → Secure   */}
+          {/* ═══════════════════════════════════════════════════════════ */}
+          <div className="mb-4 mt-8">
+            <h2 className="text-base font-bold text-gray-500 uppercase tracking-wider flex items-center gap-2">
+              <span className="w-8 h-8 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center text-sm font-bold">1</span>
+              Pre-Sales
+            </h2>
+            <p className="text-xs text-gray-400 ml-10">Lead management, site assessment, and proposal</p>
           </div>
 
-          {/* Material Delivery Entry */}
+          {/* Follow-up Tracker */}
           {id && (
-            <div className="mt-8 mb-8">
-              <MaterialDeliveryEntry projectId={id} />
+            <div id="sec-followups" className="mt-4 mb-6 bg-white rounded-lg shadow p-6 scroll-mt-24">
+              <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <Phone className="w-5 h-5 text-orange-600" />
+                Follow-up Tracker
+              </h2>
+              <FollowupPanel projectId={id} />
             </div>
           )}
-
-          {/* Photo Upload Section */}
-          {id && (
-            <div className="mt-8 mb-8">
-              <PhotoUploadSection projectId={id} onPhotoUploaded={fetchProjectData} />
-            </div>
-          )}
-
-          {/* Daily Updates & Project Timeline */}
-          {id && (
-            <div className="mt-8 mb-8">
-              <ProjectUpdates projectId={id} projectName={project?.name} />
-            </div>
-          )}
-
-          {/* ═══════════════════════════════════════════════ */}
-          {/* Phase 3 & 4: Contractor Requirement Panels     */}
-          {/* ═══════════════════════════════════════════════ */}
 
           {/* Site Survey */}
           {id && (
-            <div className="mt-8 mb-8 bg-white rounded-lg shadow p-6">
+            <div id="sec-site-survey" className="mt-4 mb-6 bg-white rounded-lg shadow p-6 scroll-mt-24">
               <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
                 <MapPin className="w-5 h-5 text-blue-600" />
                 Site Survey
@@ -489,42 +507,64 @@ export default function ProjectDetail() {
             </div>
           )}
 
-          {/* Stage Checklists & Progress */}
-          {id && (
-            <div className="mt-8 mb-8 bg-white rounded-lg shadow p-6">
-              <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                <Package className="w-5 h-5 text-green-600" />
-                Construction Stage Checklists
-              </h2>
-              <StageChecklistPanel projectId={id} currentStage={project?.stage || 1} />
-            </div>
-          )}
+          {/* Estimation & Proposal (Unified State-Based Panel) */}
+          <div id="sec-estimation" className="scroll-mt-24">
+            <UnifiedProposalPanel
+              state={projectState}
+              projectId={id}
+              project={project}
+              onStateChange={(newState) => {
+                handleStateTransition(newState)
+              }}
+            />
+          </div>
 
-          {/* Followup Tracker */}
-          {id && (
-            <div className="mt-8 mb-8 bg-white rounded-lg shadow p-6">
-              <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                <Calendar className="w-5 h-5 text-orange-600" />
-                Follow-up Tracker
-              </h2>
-              <FollowupPanel projectId={id} />
-            </div>
-          )}
+          {/* Proposal History */}
+          <div className="mt-4 bg-white rounded-lg shadow p-6">
+            <ProposalHistory
+              key={historyRefreshKey}
+              projectId={id}
+              project={project}
+            />
+          </div>
 
-          {/* Project Secure */}
+          {/* Order Confirmation / Project Security */}
           {id && (
-            <div className="mt-8 mb-8 bg-white rounded-lg shadow p-6">
+            <div id="sec-order-confirm" className="mt-4 mb-6 bg-white rounded-lg shadow p-6 scroll-mt-24">
               <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                <Zap className="w-5 h-5 text-purple-600" />
-                Project Security & Order Confirmation
+                <Shield className="w-5 h-5 text-indigo-600" />
+                Order Confirmation
               </h2>
               <ProjectSecurePanel projectId={id} />
             </div>
           )}
 
+          {/* ═══════════════════════════════════════════════════════════ */}
+          {/* PHASE 2: PRE-EXECUTION                                    */}
+          {/* Payment (Advance) → KSEB Feasibility                      */}
+          {/* ═══════════════════════════════════════════════════════════ */}
+          <div className="mb-4 mt-10">
+            <h2 className="text-base font-bold text-gray-500 uppercase tracking-wider flex items-center gap-2">
+              <span className="w-8 h-8 rounded-full bg-green-100 text-green-600 flex items-center justify-center text-sm font-bold">2</span>
+              Pre-Execution
+            </h2>
+            <p className="text-xs text-gray-400 ml-10">Advance payment and regulatory approvals</p>
+          </div>
+
+          {/* Payment Stages */}
+          {id && (
+            <div id="sec-payments" className="mt-4 mb-6 bg-white rounded-lg shadow p-6 scroll-mt-24">
+              <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <CreditCard className="w-5 h-5 text-green-600" />
+                Payment Stages
+              </h2>
+              <PaymentWorkflowPanel projectId={id} totalAmount={project?.total_amount || 0} />
+            </div>
+          )}
+
           {/* KSEB Feasibility */}
           {id && (
-            <div className="mt-8 mb-8 bg-white rounded-lg shadow p-6">
+            <div id="sec-kseb-feasibility" className="mt-4 mb-6 bg-white rounded-lg shadow p-6 scroll-mt-24">
               <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
                 <Zap className="w-5 h-5 text-yellow-600" />
                 KSEB Feasibility Submission
@@ -533,9 +573,53 @@ export default function ProjectDetail() {
             </div>
           )}
 
-          {/* KSEB Energisation */}
+          {/* ═══════════════════════════════════════════════════════════ */}
+          {/* PHASE 3: EXECUTION                                        */}
+          {/* Checklists → Materials → Photos → Updates → Energisation  */}
+          {/* ═══════════════════════════════════════════════════════════ */}
+          <div className="mb-4 mt-10">
+            <h2 className="text-base font-bold text-gray-500 uppercase tracking-wider flex items-center gap-2">
+              <span className="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-sm font-bold">3</span>
+              Execution
+            </h2>
+            <p className="text-xs text-gray-400 ml-10">Construction, installation, and KSEB inspection</p>
+          </div>
+
+          {/* Construction Stage Checklists */}
           {id && (
-            <div className="mt-8 mb-8 bg-white rounded-lg shadow p-6">
+            <div id="sec-checklists" className="mt-4 mb-6 bg-white rounded-lg shadow p-6 scroll-mt-24">
+              <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <ClipboardCheck className="w-5 h-5 text-teal-600" />
+                Construction Stage Checklists
+              </h2>
+              <StageChecklistPanel projectId={id} currentStage={project?.stage || 1} />
+            </div>
+          )}
+
+          {/* Material Delivery Entry */}
+          {id && (
+            <div id="sec-materials" className="mt-4 mb-6 scroll-mt-24">
+              <MaterialDeliveryEntry projectId={id} />
+            </div>
+          )}
+
+          {/* Photo Upload Section */}
+          {id && (
+            <div id="sec-photos" className="mt-4 mb-6 scroll-mt-24">
+              <PhotoUploadSection projectId={id} onPhotoUploaded={fetchProjectData} />
+            </div>
+          )}
+
+          {/* Daily Updates & Project Timeline */}
+          {id && (
+            <div id="sec-daily-updates" className="mt-4 mb-6 scroll-mt-24">
+              <ProjectUpdates projectId={id} projectName={project?.name} />
+            </div>
+          )}
+
+          {/* KSEB Energisation & Inspection */}
+          {id && (
+            <div id="sec-kseb-energisation" className="mt-4 mb-6 bg-white rounded-lg shadow p-6 scroll-mt-24">
               <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
                 <Zap className="w-5 h-5 text-red-600" />
                 KSEB Energisation & Inspection
@@ -544,33 +628,34 @@ export default function ProjectDetail() {
             </div>
           )}
 
+          {/* ═══════════════════════════════════════════════════════════ */}
+          {/* PHASE 4: POST-COMPLETION                                  */}
+          {/* Certificate → Handover → Warranty → Service Requests      */}
+          {/* ═══════════════════════════════════════════════════════════ */}
+          <div className="mb-4 mt-10">
+            <h2 className="text-base font-bold text-gray-500 uppercase tracking-wider flex items-center gap-2">
+              <span className="w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center text-sm font-bold">4</span>
+              Post-Completion
+            </h2>
+            <p className="text-xs text-gray-400 ml-10">Certification, handover, and ongoing support</p>
+          </div>
+
           {/* Completion Certificate */}
           {id && (
-            <div className="mt-8 mb-8 bg-white rounded-lg shadow p-6">
+            <div id="sec-certificate" className="mt-4 mb-6 bg-white rounded-lg shadow p-6 scroll-mt-24">
               <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                <Edit2 className="w-5 h-5 text-teal-600" />
+                <Award className="w-5 h-5 text-emerald-600" />
                 Completion Certificate
               </h2>
               <CompletionCertificatePanel projectId={id} />
             </div>
           )}
 
-          {/* Payment Workflow */}
-          {id && (
-            <div className="mt-8 mb-8 bg-white rounded-lg shadow p-6">
-              <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                <Users className="w-5 h-5 text-green-600" />
-                Payment Stages
-              </h2>
-              <PaymentWorkflowPanel projectId={id} totalAmount={project?.total_amount || 0} />
-            </div>
-          )}
-
           {/* Handover Document */}
           {id && (
-            <div className="mt-8 mb-8 bg-white rounded-lg shadow p-6">
+            <div id="sec-handover" className="mt-4 mb-6 bg-white rounded-lg shadow p-6 scroll-mt-24">
               <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                <Package className="w-5 h-5 text-indigo-600" />
+                <FileText className="w-5 h-5 text-violet-600" />
                 Handover Document
               </h2>
               <HandoverDocumentPanel projectId={id} />
@@ -579,9 +664,9 @@ export default function ProjectDetail() {
 
           {/* Warranty Management */}
           {id && (
-            <div className="mt-8 mb-8 bg-white rounded-lg shadow p-6">
+            <div id="sec-warranty" className="mt-4 mb-6 bg-white rounded-lg shadow p-6 scroll-mt-24">
               <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                <Zap className="w-5 h-5 text-blue-600" />
+                <Wrench className="w-5 h-5 text-sky-600" />
                 Warranty Management
               </h2>
               <WarrantyPanel projectId={id} />
@@ -590,10 +675,10 @@ export default function ProjectDetail() {
 
           {/* Service Requests */}
           {id && (
-            <div className="mt-8 mb-8 bg-white rounded-lg shadow p-6">
+            <div id="sec-service" className="mt-4 mb-8 bg-white rounded-lg shadow p-6 scroll-mt-24">
               <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                <Users className="w-5 h-5 text-orange-600" />
-                Service Requests & Customer Issues
+                <MessageSquare className="w-5 h-5 text-rose-600" />
+                Service Requests
               </h2>
               <ServiceRequestPanel projectId={id} />
             </div>

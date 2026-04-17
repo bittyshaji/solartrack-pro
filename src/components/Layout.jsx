@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { NavLink, useNavigate } from 'react-router-dom'
+import { NavLink, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import MobileBottomNav from './MobileBottomNav'
 import GlobalSearchBar from './GlobalSearchBar'
@@ -16,16 +16,32 @@ import {
   Menu,
   X,
   ChevronRight,
+  ChevronDown,
   BarChart3,
   Mail,
   Bell,
   Settings,
   CalendarClock,
+  MapPin,
+  Phone,
+  CreditCard,
+  Zap,
+  Shield,
+  Wrench,
+  MessageSquare,
 } from 'lucide-react'
 
 const navItems = [
   { to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
-  { to: '/projects', icon: FolderKanban, label: 'Projects' },
+  { to: '/projects', icon: FolderKanban, label: 'Projects', subItems: [
+    { to: '/projects', icon: FolderKanban, label: 'All Projects' },
+    { to: '/projects?section=site-survey', icon: MapPin, label: 'Site Surveys' },
+    { to: '/projects?section=followups', icon: Phone, label: 'Follow-ups' },
+    { to: '/projects?section=payments', icon: CreditCard, label: 'Payments' },
+    { to: '/projects?section=kseb', icon: Zap, label: 'KSEB' },
+    { to: '/projects?section=warranties', icon: Wrench, label: 'Warranties' },
+    { to: '/projects?section=service', icon: MessageSquare, label: 'Service Requests' },
+  ]},
   { to: '/team', icon: Users, label: 'Team' },
   { to: '/updates', icon: ClipboardList, label: 'Daily Updates' },
   { to: '/staff-attendance', icon: CalendarClock, label: 'Attendance', admin: true },
@@ -38,7 +54,9 @@ const navItems = [
 
 export default function Layout({ children, title }) {
   const [sidebarOpen, setSidebarOpen] = useState(true)
+  const [expandedMenu, setExpandedMenu] = useState(null)
   const navigate = useNavigate()
+  const location = useLocation()
   const { user, signOut, profile } = useAuth()
   const userName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'User'
   const userRole = profile?.role || user?.user_metadata?.role || 'user'
@@ -85,21 +103,70 @@ export default function Layout({ children, title }) {
         <nav className="flex-1 py-4 space-y-1 px-2 overflow-y-auto">
           {navItems
             .filter(item => !item.admin || userRole === 'admin')
-            .map(({ to, icon: Icon, label }) => (
-            <NavLink
-              key={to}
-              to={to}
-              className={({ isActive }) =>
-                `flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-sm font-medium ${
-                  isActive
-                    ? 'bg-orange-500 text-white'
-                    : 'text-gray-400 hover:bg-gray-800 hover:text-white'
-                }`
-              }
-            >
-              <Icon className="w-5 h-5 flex-shrink-0" />
-              {sidebarOpen && <span>{label}</span>}
-            </NavLink>
+            .map(({ to, icon: Icon, label, subItems }) => (
+            <div key={to}>
+              {subItems ? (
+                <>
+                  <button
+                    onClick={() => {
+                      if (sidebarOpen) {
+                        setExpandedMenu(expandedMenu === label ? null : label)
+                      }
+                      navigate(to)
+                    }}
+                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-sm font-medium ${
+                      location.pathname.startsWith(to)
+                        ? 'bg-orange-500 text-white'
+                        : 'text-gray-400 hover:bg-gray-800 hover:text-white'
+                    }`}
+                  >
+                    <Icon className="w-5 h-5 flex-shrink-0" />
+                    {sidebarOpen && (
+                      <>
+                        <span className="flex-1 text-left">{label}</span>
+                        <ChevronDown className={`w-4 h-4 transition-transform ${expandedMenu === label ? 'rotate-180' : ''}`} />
+                      </>
+                    )}
+                  </button>
+                  {sidebarOpen && expandedMenu === label && (
+                    <div className="ml-4 mt-1 space-y-0.5 border-l border-gray-700 pl-3">
+                      {subItems.map(({ to: subTo, icon: SubIcon, label: subLabel }) => (
+                        <NavLink
+                          key={subTo}
+                          to={subTo}
+                          end={subTo === '/projects'}
+                          className={({ isActive }) =>
+                            `flex items-center gap-2 px-3 py-2 rounded-lg transition-colors text-xs font-medium ${
+                              isActive
+                                ? 'bg-gray-700 text-orange-400'
+                                : 'text-gray-500 hover:bg-gray-800 hover:text-gray-300'
+                            }`
+                          }
+                        >
+                          <SubIcon className="w-4 h-4 flex-shrink-0" />
+                          <span>{subLabel}</span>
+                        </NavLink>
+                      ))}
+                    </div>
+                  )}
+                </>
+              ) : (
+                <NavLink
+                  key={to}
+                  to={to}
+                  className={({ isActive }) =>
+                    `flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-sm font-medium ${
+                      isActive
+                        ? 'bg-orange-500 text-white'
+                        : 'text-gray-400 hover:bg-gray-800 hover:text-white'
+                    }`
+                  }
+                >
+                  <Icon className="w-5 h-5 flex-shrink-0" />
+                  {sidebarOpen && <span>{label}</span>}
+                </NavLink>
+              )}
+            </div>
           ))}
         </nav>
 
