@@ -283,7 +283,7 @@ const WarrantyPanel = ({ projectId }) => {
       </div>
 
       {/* Expiry Warning */}
-      {isExpiringExpired && (
+      {(isExpiringSoon || isExpired) && (
         <div
           className={`p-4 rounded-lg flex items-start gap-3 ${
             isExpired
@@ -342,7 +342,7 @@ const WarrantyPanel = ({ projectId }) => {
                 className={`px-3 py-1 rounded-full text-sm font-medium ${
                   isExpired
                     ? 'bg-red-100 text-red-800'
-                    : isExpiringExpired
+                    : isExpiringSoon
                     ? 'bg-orange-100 text-orange-800'
                     : 'bg-green-100 text-green-800'
                 }`}
@@ -398,7 +398,7 @@ const WarrantyPanel = ({ projectId }) => {
                   className={`h-2 rounded-full transition-all ${
                     isExpired
                       ? 'bg-gray-400'
-                      : isExpiringExpired
+                      : isExpiringSoon
                       ? 'bg-orange-500'
                       : 'bg-green-500'
                   }`}
