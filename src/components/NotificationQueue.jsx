@@ -214,20 +214,21 @@ export default function NotificationQueue({ onRefresh }) {
           </div>
         </div>
 
-      <div className="bg-white rounded-lg shadow-sm p-6">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-3">
-            <Mail className="w-6 h-6 text-blue-600" />
-            <div>
-              <h2 className="text-lg font-semibold text-gray-900">Notification Queue</h2>
-              <p className="text-sm text-gray-600">
-                {queue.length} pending email{queue.length !== 1 ? 's' : ''}
-              </p>
+        {/* Notification Queue Card */}
+        <div className="bg-white rounded-lg shadow-sm p-6">
+          {/* Card Header */}
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <Mail className="w-6 h-6 text-blue-600" />
+              <div>
+                <h2 className="text-lg font-semibold text-gray-900">Notification Queue</h2>
+                <p className="text-sm text-gray-600">
+                  {queue.length} pending email{queue.length !== 1 ? 's' : ''}
+                </p>
+              </div>
             </div>
-          </div>
 
-        <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2">
           <button
             onClick={loadQueue}
             disabled={loading}
@@ -351,8 +352,10 @@ export default function NotificationQueue({ onRefresh }) {
               </div>
             </div>
           ))}
+            </div>
+          )}
         </div>
-      )}
+      </div>
     </div>
   )
 }
