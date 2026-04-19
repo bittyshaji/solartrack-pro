@@ -1,0 +1,77 @@
+CUSTOMER-FIRST WORKFLOW - EXECUTION GUIDE
+==========================================
+
+STATUS: READY TO DEPLOY
+
+3 PHASES | 100 MINUTES | 3,171 LINES CODE
+
+═════════════════════════════════════════════════════════════════════════════
+
+PHASE 1: DATABASE (5 min)
+────────────────────────
+File: CUSTOMER_FIRST_WORKFLOW_FINAL.sql
+Action: Copy to Supabase SQL Editor → Run → Verify 8 checks pass
+Result: Legacy customer created, all projects linked, triggers active
+
+PHASE 2: APPLICATION (15 min)
+─────────────────────────────
+Deploy 9 files in order:
+  1. src/lib/customerService.ENHANCED.js
+  2. src/lib/projectService.ENHANCED.js
+  3. src/components/guards/ProjectCreationGuard.jsx
+  4. src/components/customers/CustomerSelector.jsx
+  5. src/components/customers/CustomerCreationModal.jsx
+  6. src/pages/Customers.jsx
+  7. src/pages/CreateProject.jsx
+  8. src/pages/CustomersManagement.jsx
+  9. src/App.jsx
+
+Result: App compiles, no errors, routes work
+
+PHASE 3: TESTING (70 min)
+─────────────────────────
+Database (7 tests):
+  □ NOT NULL constraint applied
+  □ Legacy customer created
+  □ Triggers active
+  □ Views created
+  □ Indexes created
+  □ Zero NULL customer_ids
+  □ Functions available
+
+Application (5 tests):
+  □ Code compiles
+  □ No console errors
+  □ Routes available
+  □ Components load
+  □ Services work
+
+Workflows (5 tests):
+  □ View customers page
+  □ Create customer
+  □ Create project (requires customer)
+  □ Customer enforced
+  □ Data integrity verified
+
+═════════════════════════════════════════════════════════════════════════════
+
+WHAT USERS SEE:
+  ✅ Customers required before projects
+  ✅ /customers page with search/sort/edit
+  ✅ "Create New Customer" in project form
+  ✅ Project breakdown by status
+
+SYSTEM ENFORCES:
+  ✅ Database NOT NULL + triggers
+  ✅ Service validation
+  ✅ UI required field
+  ✅ Route guards
+
+═════════════════════════════════════════════════════════════════════════════
+
+DEPLOYMENT COMPLETE WHEN:
+  ✅ Phase 1: 8 database checks pass
+  ✅ Phase 2: App compiles without errors
+  ✅ Phase 3: All 17 tests pass
+
+═════════════════════════════════════════════════════════════════════════════

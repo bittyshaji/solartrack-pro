@@ -1,0 +1,152 @@
+{
+  // TypeScript Configuration
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "typescript.prefer": "ts-server",
+
+  // TypeScript Extensions
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "typescript.autoImportSuggestions.enabled": true,
+  "typescript.implementationsCodeLens.enabled": true,
+  "typescript.referencesCodeLens.enabled": true,
+  "typescript.referencesCodeLens.showOnAllFunctions": true,
+  "typescript.tsserver.logVerbosity": "verbose",
+
+  // Code Editor
+  "[typescript]": {
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit",
+      "source.organizeImports": "explicit"
+    },
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.rulers": [80, 120],
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+    "editor.detectIndentation": true
+  },
+
+  "[typescriptreact]": {
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit",
+      "source.organizeImports": "explicit"
+    },
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.rulers": [80, 120],
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+    "editor.detectIndentation": true
+  },
+
+  "[javascript]": {
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit",
+      "source.organizeImports": "explicit"
+    },
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.rulers": [80, 120],
+    "editor.tabSize": 2
+  },
+
+  "[jsx]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.tabSize": 2
+  },
+
+  // General Editor Settings
+  "editor.wordWrap": "on",
+  "editor.formatOnPaste": true,
+  "editor.minimap.enabled": true,
+  "editor.bracketPairColorization.enabled": true,
+  "editor.guides.bracketPairs": true,
+  "editor.stickyScroll.enabled": true,
+
+  // Path Aliases
+  "path-intellisense.mappings": {
+    "@": "${workspaceRoot}/src"
+  },
+
+  // Imports Sorting
+  "importSorter.generalConfiguration.sortOnBeforeSave": true,
+  "importSorter.importStringConfiguration.tabSize": 2,
+
+  // File Settings
+  "files.exclude": {
+    "**/node_modules": true,
+    "**/.DS_Store": true,
+    "**/dist": true,
+    "**/.next": true
+  },
+
+  "files.watcherExclude": {
+    "**/node_modules/**": true,
+    "**/dist/**": true,
+    "**/.git/**": true,
+    "**/coverage/**": true
+  },
+
+  // Search Settings
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/.git": true,
+    "**/coverage": true,
+    "**/.vscode": true
+  },
+
+  // Prettier Configuration
+  "prettier.semi": false,
+  "prettier.singleQuote": true,
+  "prettier.tabWidth": 2,
+  "prettier.trailingComma": "es5",
+  "prettier.bracketSpacing": true,
+  "prettier.arrowParens": "always",
+  "prettier.printWidth": 100,
+  "prettier.useTabs": false,
+
+  // ESLint Configuration (if added later)
+  "eslint.format.enable": true,
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+
+  // Better Comments
+  "better-comments.multilineComments": true,
+  "better-comments.highlightPlainText": false,
+
+  // Spell Check
+  "cSpell.enabled": true,
+  "cSpell.language": "en",
+
+  // Extensions
+  "extensions.recommendations": [
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
+    "ms-vscode.vscode-typescript-next",
+    "usernamehw.errorlens",
+    "ms-vscode.makefile-tools",
+    "bradlc.vscode-tailwindcss",
+    "dsznajder.es7-react-js-snippets",
+    "xabikos.JavaScriptSnippets",
+    "mhutchie.git-graph",
+    "eamodio.gitlens",
+    "ms-vscode.extension-pack-for-react",
+    "github.copilot",
+    "github.copilot-chat"
+  ],
+
+  // Tailwind CSS Settings
+  "tailwindCSS.experimental.classRegex": [
+    ["cva\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
+  ],
+
+  // Search configuration
+  "search.useIgnoreFiles": true,
+  "search.useParentIgnoreFiles": true
+}

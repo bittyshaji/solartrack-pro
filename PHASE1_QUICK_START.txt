@@ -1,0 +1,111 @@
+================================================================================
+                     PHASE 1 - QUICK START GUIDE
+================================================================================
+
+PROJECT: SolarTrack Pro - Phase 1 Enablement
+STATUS: READY TO EXECUTE
+TIME ESTIMATE: 30-45 minutes
+
+================================================================================
+                              STEP 1: EXECUTE SQL
+================================================================================
+
+URL: https://supabase.com/dashboard/project/opzoighusosmxcyneifc/sql/new
+
+For each SQL BLOCK below:
+  1. Click "New Query"
+  2. Copy-paste the SQL
+  3. Click "Run"
+  4. Verify ✓ success
+
+SQL BLOCKS:
+  ✓ Block 1: project_photos table
+  ✓ Block 2: project_customers table
+  ✓ Block 3: team_members table
+  ✓ Block 4: Fix tasks foreign key
+
+See PHASE1_FINAL_CHECKLIST.md for full SQL code
+
+================================================================================
+                         STEP 2: RESTART DEV SERVER
+================================================================================
+
+Terminal:
+  $ npm run dev
+
+Expected output:
+  Local: http://localhost:5173/
+
+The server is ready when you see the Vite startup message.
+
+================================================================================
+                       STEP 3: HARD REFRESH BROWSER
+================================================================================
+
+URL: http://localhost:5173
+
+Hard Refresh:
+  Windows/Linux: Ctrl+Shift+R
+  Mac: Cmd+Shift+R
+
+Wait for login page to load.
+
+================================================================================
+                      STEP 4: TEST ALL 11 FEATURES
+================================================================================
+
+CORE FEATURES (8):
+  1. Projects - view/manage project list
+  2. Materials - track project materials
+  3. EST State - estimate workflow
+  4. NEG State - negotiation workflow
+  5. EXE State - execution workflow
+  6. Proposal PDF - generate PDF proposals
+  7. Invoices - create/manage invoices
+  8. Invoice PDF - generate invoice PDFs
+
+NEW FEATURES (3):
+  9. Customer Banner - display customer info [NEW]
+  10. Photo Upload - upload project photos [NEW]
+  11. Daily Updates - task/update notes [NEW]
+
+Testing:
+  ✓ Log in
+  ✓ Navigate through all features
+  ✓ Create sample data
+  ✓ Generate PDFs
+  ✓ Test new features (9, 10, 11)
+  ✓ Refresh page → verify data persists
+
+================================================================================
+                            TROUBLESHOOTING
+================================================================================
+
+Issue: "Cannot find table" error
+  → Re-run SQL BLOCK 1 in Supabase
+
+Issue: Features not visible
+  → Hard refresh: Ctrl+Shift+R (Windows/Linux) or Cmd+Shift+R (Mac)
+
+Issue: Dev server won't start
+  → rm -rf node_modules package-lock.json && npm install && npm run dev
+
+Issue: Photos won't upload
+  → Check Supabase - verify project_photos table exists
+
+================================================================================
+                         SUCCESS CRITERIA
+================================================================================
+
+Phase 1 COMPLETE when:
+  ✓ All 4 SQL blocks executed successfully
+  ✓ Dev server running without errors
+  ✓ All 11 features working and accessible
+  ✓ Data persists after page refresh
+  ✓ No "Cannot find table" errors in console
+
+================================================================================
+                          ESTIMATED TIME: 30-45 minutes
+================================================================================
+
+Questions? Check PHASE1_FINAL_CHECKLIST.md for detailed instructions.

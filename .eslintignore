@@ -1,0 +1,14 @@
+node_modules/
+dist/
+build/
+.vscode/
+.idea/
+*.min.js
+*.config.js
+vite.config.js
+vitest.config.js
+coverage/
+.git/
+.env
+.env.local
+.env.*.local
