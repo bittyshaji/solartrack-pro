@@ -1,17 +1,10 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import { visualizer } from 'vite-plugin-visualizer'
 import path from 'path'
 
 export default defineConfig({
   plugins: [
     react(),
-    visualizer({
-      open: false,
-      gzipSize: true,
-      brotliSize: true,
-      filename: 'dist/bundle-analysis.html'
-    })
   ],
   resolve: {
     alias: {
@@ -55,7 +48,7 @@ export default defineConfig({
 
     rollupOptions: {
       output: {
-        // Optimized chunk configuration
+        // Phase 2: Component Code Splitting
         manualChunks: (id) => {
           // Vendor chunks - split large dependencies
           if (id.includes('node_modules')) {
