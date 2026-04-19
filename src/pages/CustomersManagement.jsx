@@ -5,9 +5,10 @@
  */
 
 import React, { useState, useEffect } from 'react'
-import { Search, Plus, Trash2, Edit2, Eye, ChevronDown, RefreshCw, AlertCircle } from 'lucide-react'
+import { Search, Plus, Trash2, Edit2, Eye, ChevronDown, RefreshCw, AlertCircle, X } from 'lucide-react'
 import { getCustomerProjectSummary, createCustomer, updateCustomer, deactivateCustomer } from '../lib/customerService'
 import { CustomerCreationModal } from '../components/customers/CustomerCreationModal'
+import { supabase } from '../lib/supabase'
 import toast from 'react-hot-toast'
 
 export function CustomersManagement() {
@@ -21,6 +22,7 @@ export function CustomersManagement() {
   const [expandedCustomer, setExpandedCustomer] = useState(null)
   const [editingCustomer, setEditingCustomer] = useState(null)
   const [editFormData, setEditFormData] = useState({})
+  const [projectModal, setProjectModal] = useState({ isOpen: false, customerId: null, projects: [], filterStatus: 'all' })
 
   // Load customers on mount
   useEffect(() => {
@@ -127,6 +129,32 @@ export function CustomersManagement() {
     }
   }
 
+  const fetchCustomerProjects = async (customerId, filterStatus = 'all') => {
+    try {
+      let query = supabase
+        .from('projects')
+        .select('id, name, status, created_at, updated_at')
+        .eq('customer_id', customerId)
+
+      if (filterStatus !== 'all') {
+        query = query.eq('status', filterStatus)
+      }
+
+      const { data, error } = await query.order('created_at', { ascending: false })
+      if (error) throw error
+
+      setProjectModal({
+        isOpen: true,
+        customerId,
+        projects: data || [],
+        filterStatus
+      })
+    } catch (err) {
+      console.error('Error fetching projects:', err)
+      toast.error('Failed to load projects')
+    }
+  }
+
   const getProjectStatusColor = (status) => {
     switch (status) {
       case 'Completed':
@@ -190,8 +218,17 @@ export function CustomersManagement() {
                 placeholder="Search by name, email, phone, or customer ID..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
+              {searchTerm && (
+                <button
+                  onClick={() => setSearchTerm('')}
+                  className="absolute right-3 top-3 text-gray-400 hover:text-gray-600 transition"
+                  title="Clear search"
+                >
+                  <X size={20} />
+                </button>
+              )}
             </div>
 
             {/* Sort */}
@@ -263,16 +300,30 @@ export function CustomersManagement() {
                       </div>
                     </div>
 
-                    {/* Customer Stats */}
+                    {/* Customer Stats - Clickable */}
                     <div className="flex items-center gap-6 mr-4">
-                      <div className="text-right">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          fetchCustomerProjects(customer.customer_id, 'all')
+                        }}
+                        className="text-right hover:opacity-70 transition cursor-pointer"
+                        title="Click to view all projects"
+                      >
                         <div className="text-2xl font-bold text-blue-600">{customer.total_projects || 0}</div>
                         <div className="text-xs text-gray-600">Projects</div>
-                      </div>
-                      <div className="text-right">
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          fetchCustomerProjects(customer.customer_id, 'In Progress')
+                        }}
+                        className="text-right hover:opacity-70 transition cursor-pointer"
+                        title="Click to view active projects"
+                      >
                         <div className="text-2xl font-bold text-green-600">{customer.active_projects || 0}</div>
                         <div className="text-xs text-gray-600">Active</div>
-                      </div>
+                      </button>
                     </div>
 
                     {/* Expand Icon */}
@@ -460,6 +511,68 @@ export function CustomersManagement() {
           </div>
         )}
       </div>
+
+      {/* Projects Modal */}
+      {projectModal.isOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-lg shadow-lg max-w-2xl w-full max-h-96 overflow-y-auto">
+            {/* Modal Header */}
+            <div className="sticky top-0 bg-white border-b p-6 flex justify-between items-center">
+              <div>
+                <h3 className="text-xl font-semibold text-gray-900">
+                  {projectModal.filterStatus === 'all' ? 'All Projects' : 'Active Projects'}
+                </h3>
+                <p className="text-sm text-gray-600 mt-1">
+                  {projectModal.projects.length} project{projectModal.projects.length !== 1 ? 's' : ''}
+                </p>
+              </div>
+              <button
+                onClick={() => setProjectModal({ ...projectModal, isOpen: false })}
+                className="text-gray-400 hover:text-gray-600 transition"
+              >
+                <X size={24} />
+              </button>
+            </div>
+
+            {/* Modal Content */}
+            <div className="p-6">
+              {projectModal.projects.length > 0 ? (
+                <div className="space-y-3">
+                  {projectModal.projects.map((project) => (
+                    <div
+                      key={project.id}
+                      className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition"
+                    >
+                      <div className="flex justify-between items-start">
+                        <div className="flex-1">
+                          <h4 className="font-medium text-gray-900">{project.name}</h4>
+                          <p className="text-sm text-gray-600 mt-1">
+                            {new Date(project.created_at).toLocaleDateString()}
+                          </p>
+                        </div>
+                        <span
+                          className={`px-3 py-1 rounded-full text-xs font-medium ${getProjectStatusColor(
+                            project.status
+                          )}`}
+                        >
+                          {project.status}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-8">
+                  <AlertCircle className="mx-auto text-gray-400 mb-3" size={32} />
+                  <p className="text-gray-600">
+                    No {projectModal.filterStatus === 'all' ? '' : 'active '} projects found
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Create Customer Modal */}
       <CustomerCreationModal
