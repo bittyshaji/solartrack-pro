@@ -85,7 +85,7 @@ export default function Layout({ children, title }) {
       <aside
         className={`${
           sidebarOpen ? 'w-64' : 'w-16'
-        } hidden md:flex flex-shrink-0 bg-gray-900 text-white flex-col transition-all duration-300 ease-in-out`}
+        } hidden md:flex flex-shrink-0 bg-gray-900 text-white flex-col transition-all duration-300 ease-in-out relative z-40`}
       >
         {/* Logo */}
         <div className="flex items-center gap-3 px-4 py-5 border-b border-gray-700">
@@ -115,7 +115,7 @@ export default function Layout({ children, title }) {
                       }
                       navigate(to)
                     }}
-                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-sm font-medium ${
+                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-sm font-medium overflow-hidden ${
                       location.pathname.startsWith(to)
                         ? 'bg-orange-500 text-white'
                         : 'text-gray-400 hover:bg-gray-800 hover:text-white'
@@ -124,8 +124,8 @@ export default function Layout({ children, title }) {
                     <Icon className="w-5 h-5 flex-shrink-0" />
                     {sidebarOpen && (
                       <>
-                        <span className="flex-1 text-left">{label}</span>
-                        <ChevronDown className={`w-4 h-4 transition-transform ${expandedMenu === label ? 'rotate-180' : ''}`} />
+                        <span className="flex-1 text-left truncate">{label}</span>
+                        <ChevronDown className={`w-4 h-4 flex-shrink-0 transition-transform ${expandedMenu === label ? 'rotate-180' : ''}`} />
                       </>
                     )}
                   </button>
@@ -149,7 +149,7 @@ export default function Layout({ children, title }) {
                   key={to}
                   to={to}
                   className={({ isActive }) =>
-                    `flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-sm font-medium ${
+                    `flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-sm font-medium overflow-hidden ${
                       isActive
                         ? 'bg-orange-500 text-white'
                         : 'text-gray-400 hover:bg-gray-800 hover:text-white'
@@ -157,7 +157,7 @@ export default function Layout({ children, title }) {
                   }
                 >
                   <Icon className="w-5 h-5 flex-shrink-0" />
-                  {sidebarOpen && <span>{label}</span>}
+                  {sidebarOpen && <span className="truncate">{label}</span>}
                 </NavLink>
               )}
             </div>
