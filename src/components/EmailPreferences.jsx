@@ -5,12 +5,14 @@
  */
 
 import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { getNotificationPreferences, updateNotificationPreferences } from '../lib/notificationService'
 import { getEmailLogs } from '../lib/emailService'
-import { Mail, Save, AlertCircle, CheckCircle } from 'lucide-react'
+import { Mail, Save, AlertCircle, CheckCircle, ArrowLeft } from 'lucide-react'
 import toast from 'react-hot-toast'
 
 export default function EmailPreferences({ customerId, onPreferencesChange }) {
+  const navigate = useNavigate()
   const [preferences, setPreferences] = useState({
     emailUpdates: true,
     smsNotifications: false,
@@ -83,13 +85,31 @@ export default function EmailPreferences({ customerId, onPreferencesChange }) {
   }
 
   return (
-    <div className="space-y-6">
-      {/* Email Preferences Card */}
-      <div className="bg-white rounded-lg shadow-sm p-6">
-        <div className="flex items-center gap-3 mb-6">
-          <Mail className="w-6 h-6 text-blue-600" />
-          <h2 className="text-xl font-semibold text-gray-900">Email Preferences</h2>
+    <div className="min-h-screen bg-gray-50 p-6">
+      <div className="max-w-2xl mx-auto">
+        {/* Header */}
+        <div className="mb-8 flex items-center gap-4">
+          <button
+            onClick={() => navigate(-1)}
+            className="flex items-center gap-2 px-3 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition"
+            title="Go back"
+          >
+            <ArrowLeft size={20} />
+            <span className="hidden sm:inline">Back</span>
+          </button>
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">Email Preferences</h1>
+            <p className="text-gray-600 mt-1">Manage your notification settings</p>
+          </div>
         </div>
+
+        <div className="space-y-6">
+          {/* Email Preferences Card */}
+          <div className="bg-white rounded-lg shadow-sm p-6">
+            <div className="flex items-center gap-3 mb-6">
+              <Mail className="w-6 h-6 text-blue-600" />
+              <h2 className="text-xl font-semibold text-gray-900">Notification Settings</h2>
+            </div>
 
         <div className="space-y-4">
           {/* Email Updates Toggle */}

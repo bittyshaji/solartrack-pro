@@ -5,11 +5,13 @@
  */
 
 import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { getNotificationQueue, sendEmailViaResend, markEmailSent } from '../lib/emailService'
-import { Mail, Send, Trash2, Clock, RefreshCw } from 'lucide-react'
+import { Mail, Send, Trash2, Clock, RefreshCw, ArrowLeft } from 'lucide-react'
 import toast from 'react-hot-toast'
 
 export default function NotificationQueue({ onRefresh }) {
+  const navigate = useNavigate()
   const [queue, setQueue] = useState([])
   const [loading, setLoading] = useState(true)
   const [sending, setSending] = useState(false)
@@ -194,18 +196,36 @@ export default function NotificationQueue({ onRefresh }) {
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-sm p-6">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-3">
-          <Mail className="w-6 h-6 text-blue-600" />
+    <div className="min-h-screen bg-gray-50 p-6">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="mb-8 flex items-center gap-4">
+          <button
+            onClick={() => navigate(-1)}
+            className="flex items-center gap-2 px-3 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition"
+            title="Go back"
+          >
+            <ArrowLeft size={20} />
+            <span className="hidden sm:inline">Back</span>
+          </button>
           <div>
-            <h2 className="text-lg font-semibold text-gray-900">Notification Queue</h2>
-            <p className="text-sm text-gray-600">
-              {queue.length} pending email{queue.length !== 1 ? 's' : ''}
-            </p>
+            <h1 className="text-3xl font-bold text-gray-900">Notifications</h1>
+            <p className="text-gray-600 mt-1">{queue.length} pending email{queue.length !== 1 ? 's' : ''}</p>
           </div>
         </div>
+
+      <div className="bg-white rounded-lg shadow-sm p-6">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-3">
+            <Mail className="w-6 h-6 text-blue-600" />
+            <div>
+              <h2 className="text-lg font-semibold text-gray-900">Notification Queue</h2>
+              <p className="text-sm text-gray-600">
+                {queue.length} pending email{queue.length !== 1 ? 's' : ''}
+              </p>
+            </div>
+          </div>
 
         <div className="flex items-center gap-2">
           <button

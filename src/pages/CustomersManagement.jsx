@@ -6,7 +6,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Search, Plus, Trash2, Edit2, Eye, ChevronDown, RefreshCw, AlertCircle, X } from 'lucide-react'
+import { Search, Plus, Trash2, Edit2, Eye, ChevronDown, RefreshCw, AlertCircle, X, ArrowLeft } from 'lucide-react'
 import { getCustomerProjectSummary, createCustomer, updateCustomer, deactivateCustomer } from '../lib/customerService'
 import { CustomerCreationModal } from '../components/customers/CustomerCreationModal'
 import { supabase } from '../lib/supabase'
@@ -192,10 +192,20 @@ export function CustomersManagement() {
       {/* Header */}
       <div className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex justify-between items-center">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">Customers</h1>
-              <p className="text-gray-600 mt-1">Manage all customers and their projects</p>
+          <div className="flex justify-between items-center gap-4">
+            <div className="flex items-center gap-4">
+              <button
+                onClick={() => navigate(-1)}
+                className="flex items-center gap-2 px-3 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition"
+                title="Go back"
+              >
+                <ArrowLeft size={20} />
+                <span className="hidden sm:inline">Back</span>
+              </button>
+              <div>
+                <h1 className="text-3xl font-bold text-gray-900">Customers</h1>
+                <p className="text-gray-600 mt-1">Manage all customers and their projects</p>
+              </div>
             </div>
             <button
               onClick={() => setShowCreateModal(true)}

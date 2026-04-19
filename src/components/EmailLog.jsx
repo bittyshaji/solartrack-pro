@@ -5,12 +5,14 @@
  */
 
 import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { getEmailLogs, resendFailedEmails } from '../lib/emailService'
-import { Mail, Download, RotateCcw, Filter, Trash2, AlertCircle, CheckCircle, Clock } from 'lucide-react'
+import { Mail, Download, RotateCcw, Filter, Trash2, AlertCircle, CheckCircle, Clock, ArrowLeft } from 'lucide-react'
 import toast from 'react-hot-toast'
 
 export default function EmailLog() {
+  const navigate = useNavigate()
   const [logs, setLogs] = useState([])
   const [loading, setLoading] = useState(true)
   const [filters, setFilters] = useState({
@@ -176,9 +178,19 @@ export default function EmailLog() {
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Email Logs</h1>
-          <p className="text-gray-600">Monitor and manage email notifications</p>
+        <div className="mb-8 flex items-center gap-4">
+          <button
+            onClick={() => navigate(-1)}
+            className="flex items-center gap-2 px-3 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition"
+            title="Go back"
+          >
+            <ArrowLeft size={20} />
+            <span className="hidden sm:inline">Back</span>
+          </button>
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">Email Logs</h1>
+            <p className="text-gray-600">Monitor and manage email notifications</p>
+          </div>
         </div>
 
         {/* Filters */}
