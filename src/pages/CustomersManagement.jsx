@@ -65,11 +65,11 @@ export function CustomersManagement() {
     filtered.sort((a, b) => {
       switch (sortBy) {
         case 'name':
-          return a.name.localeCompare(b.name)
+          return (a.name || '').localeCompare(b.name || '')
         case 'projects':
           return (b.total_projects || 0) - (a.total_projects || 0)
         case 'created':
-          return new Date(b.created_at) - new Date(a.created_at)
+          return new Date(b.created_at || 0) - new Date(a.created_at || 0)
         default:
           return 0
       }
