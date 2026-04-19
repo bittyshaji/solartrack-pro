@@ -36,8 +36,10 @@ export function CustomersManagement() {
     setLoading(true)
     try {
       const data = await getCustomerProjectSummary()
-      setCustomers(data)
-      toast.success(`Loaded ${data.length} customers`)
+      // Filter out any null/invalid entries
+      const validCustomers = (data || []).filter(c => c && c.customer_id && c.name)
+      setCustomers(validCustomers)
+      toast.success(`Loaded ${validCustomers.length} customers`)
     } catch (err) {
       console.error('Error loading customers:', err)
       toast.error('Failed to load customers')
