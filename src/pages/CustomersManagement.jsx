@@ -5,6 +5,7 @@
  */
 
 import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Search, Plus, Trash2, Edit2, Eye, ChevronDown, RefreshCw, AlertCircle, X } from 'lucide-react'
 import { getCustomerProjectSummary, createCustomer, updateCustomer, deactivateCustomer } from '../lib/customerService'
 import { CustomerCreationModal } from '../components/customers/CustomerCreationModal'
@@ -12,6 +13,8 @@ import { supabase } from '../lib/supabase'
 import toast from 'react-hot-toast'
 
 export function CustomersManagement() {
+  const navigate = useNavigate()
+
   // State management
   const [customers, setCustomers] = useState([])
   const [filteredCustomers, setFilteredCustomers] = useState([])
@@ -539,13 +542,17 @@ export function CustomersManagement() {
               {projectModal.projects.length > 0 ? (
                 <div className="space-y-3">
                   {projectModal.projects.map((project) => (
-                    <div
+                    <button
                       key={project.id}
-                      className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition"
+                      onClick={() => {
+                        navigate(`/projects/${project.id}`)
+                        setProjectModal({ ...projectModal, isOpen: false })
+                      }}
+                      className="w-full text-left p-4 border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 transition cursor-pointer"
                     >
                       <div className="flex justify-between items-start">
                         <div className="flex-1">
-                          <h4 className="font-medium text-gray-900">{project.name}</h4>
+                          <h4 className="font-medium text-gray-900 hover:text-blue-600 transition">{project.name}</h4>
                           <p className="text-sm text-gray-600 mt-1">
                             {new Date(project.created_at).toLocaleDateString()}
                           </p>
@@ -558,7 +565,7 @@ export function CustomersManagement() {
                           {project.status}
                         </span>
                       </div>
-                    </div>
+                    </button>
                   ))}
                 </div>
               ) : (
